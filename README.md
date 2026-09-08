@@ -44,6 +44,20 @@ bun run build            # production build, prerendered into .voidbase/pb_publi
 It is a [voidbase stack app](https://voidbase.cloud/docs/run/stack): pages, the API and the instance build into one
 Worker. The instance holds nothing yet, because the registry is in git; it is here for what comes after listing.
 
+## Deploying
+
+Cloudflare Workers Builds calls `bun run build`, `bun run deploy` and `bun run version` with the root directory
+set to `/`. Two settings have to exist on the trigger, under **Settings > Build > Variables and secrets**, because
+neither can live in this repository:
+
+| | | |
+| --- | --- | --- |
+| `BUN_VERSION` | variable | `1.3.14` or later. Cloudflare's default Bun reports itself as Node 22.6, and Vite needs 22.12. There is no file that pins Bun, only this variable. |
+| `VOIDBASE_DEPLOY_CF_API_KEY` | secret | The deploy token. `voidbase token` prints the dashboard link that creates one with the right permissions. |
+
+Everything else the deploy needs is declared in `vb_secrets/main.ts` with defaults, including the Worker name and
+`marketplace.voidbase.cloud`.
+
 ## Credit
 
 The submission-by-issue model, the audit-before-listing order and the shape of the registry are taken from

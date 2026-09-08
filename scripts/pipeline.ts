@@ -16,6 +16,21 @@ import { environment } from "./environment";
 const verb = process.argv[2] ?? "";
 const here = environment();
 
+// Vite 8 refuses to start under a runtime reporting Node older than 22.12, and Bun reports its own emulated Node
+// version, so an old Bun fails with a message about Node that names neither Bun nor the fix. Cloudflare's build
+// image pins Bun only through the BUN_VERSION build variable (there is no .bun-version file), so this says that
+// out loud rather than leaving the next person to decode Vite's complaint.
+function checkRuntime(): void {
+  const [major = 0, minor = 0] = (process.versions.node ?? "0.0").split(".").map(Number);
+  if (major > 22 || (major === 22 && minor >= 12)) return;
+  console.error(
+    `[build] Bun ${Bun.version} reports Node ${process.versions.node}, and Vite needs 22.12 or newer.\n` +
+      `        On Cloudflare Workers Builds, set the build variable BUN_VERSION to 1.3.14 or later\n` +
+      `        (Settings > Build > Variables and secrets). Locally, upgrade Bun.`,
+  );
+  process.exit(1);
+}
+
 const sh = async (cmd: string[], cwd?: string): Promise<number> =>
   Bun.spawn(cmd, { cwd, stdout: "inherit", stderr: "inherit", stdin: "inherit" }).exited;
 const say = (what: string) => console.log(`[${verb}] ${what} — ${here.describe()}`);
@@ -24,6 +39,7 @@ const done = (code: number): never => process.exit(code);
 switch (verb) {
   case "build": {
     say("the registry, then the site into .voidbase/, then the typecheck");
+    checkRuntime();
     const registry = await sh(["bun", "scripts/registry.ts", "check"]);
     if (registry !== 0) done(registry);
     const built = await sh(["bunx", "--bun", "vite", "build"]);

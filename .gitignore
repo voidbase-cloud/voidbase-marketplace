@@ -1,0 +1,8 @@
+node_modules/
+.void/
+.voidbase/
+dist/
+vb_secrets/secrets.json
+.env
+.env.local
+*.log

@@ -1,0 +1,22 @@
+# The registry has to parse and the site has to build, on every push and every pull request, because both of them
+# are edited by a workflow as well as by people.
+name: check
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - name: The registry is valid
+        run: bun run registry:check
+      - name: It typechecks
+        run: bun run check
+      - name: It builds
+        run: bun run build

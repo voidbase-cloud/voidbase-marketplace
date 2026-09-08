@@ -1,0 +1,56 @@
+name: Submit a template
+description: List a public repository other people can start a voidbase project from.
+title: "[Template]: "
+labels: ["submission", "template"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Your template stays in your repository. Listing it here points people at it; nothing is copied or vendored.
+
+        A template is checked automatically when you open this issue, and a maintainer decides from there. What the
+        checks look at is in [SUBMISSION.md](../blob/main/SUBMISSION.md).
+  - type: input
+    id: repository
+    attributes:
+      label: Repository
+      description: A public GitHub repository. Turn on "Template repository" in its settings so people can start from it in one click.
+      placeholder: https://github.com/you/your-voidbase-template
+    validations: { required: true }
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      description: What it is called in the listing. Up to 60 characters.
+      placeholder: Blog with comments
+    validations: { required: true }
+  - type: input
+    id: summary
+    attributes:
+      label: One-line summary
+      description: What someone gets by starting from it. One line, up to 160 characters.
+      placeholder: Posts, comments and an author dashboard, with the collections already defined.
+    validations: { required: true }
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options: [Starter, Site, Application, Integration, Example]
+    validations: { required: true }
+  - type: dropdown
+    id: tags
+    attributes:
+      label: Tags
+      description: One to three. More than three is refused.
+      multiple: true
+      options: [Auth, Blog, Commerce, Content, Dashboard, Docs, Files, Minimal, Realtime, SaaS, Stack, TypeScript]
+    validations: { required: true }
+  - type: checkboxes
+    id: confirms
+    attributes:
+      label: Before you submit
+      options:
+        - label: The repository is public, has a licence, and has a README that says what it is.
+          required: true
+        - label: It is mine to list, or I have the owner's agreement.
+          required: true

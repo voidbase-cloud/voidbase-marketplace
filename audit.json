@@ -1,0 +1,43 @@
+{
+  "report": {
+    "ranOn": "2026-09-08T02:19:53.448Z",
+    "checks": [
+      {
+        "name": "public repository",
+        "passed": true,
+        "detail": "reachable without signing in"
+      },
+      {
+        "name": "not archived",
+        "passed": true,
+        "detail": "actively owned"
+      },
+      {
+        "name": "has a licence",
+        "passed": false,
+        "detail": "GitHub cannot identify one, so nobody can tell what they may do with it. A LICENSE file GitHub does not recognise counts as none here."
+      },
+      {
+        "name": "has a commit to point at",
+        "passed": true,
+        "detail": "376c0d83f00d on master"
+      },
+      {
+        "name": "looks like a voidbase project",
+        "passed": true,
+        "detail": "found void.json, vb_hooks, vb_migrations, vb_secrets"
+      },
+      {
+        "name": "has a README",
+        "passed": true,
+        "detail": "present"
+      },
+      {
+        "name": "nothing obviously alarming in the files we read",
+        "passed": true,
+        "detail": "read package.json, README.md, void.json, vite.config.mts"
+      }
+    ]
+  },
+  "commit": "376c0d83f00d397da90652685107f05041adb0f0"
+}

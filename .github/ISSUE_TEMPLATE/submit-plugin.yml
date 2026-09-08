@@ -1,0 +1,52 @@
+name: Submit a plugin
+description: Register a plugin you have written or want to write, before the plugin format exists.
+title: "[Plugin]: "
+labels: ["submission", "plugin"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Read this first.** `pb_plugins` does not exist yet. There is no format to build against, nothing here can
+        be installed, and this listing does not make your plugin work with voidbase.
+
+        This form is open anyway, because the plugin loader is being designed and what people actually want to build
+        should shape it. Submitting tells us what you would write and gets you told when the format lands.
+  - type: input
+    id: repository
+    attributes:
+      label: Repository
+      description: A public GitHub repository, even if it is only a README describing the idea.
+      placeholder: https://github.com/you/your-voidbase-plugin
+    validations: { required: true }
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      description: Up to 60 characters.
+    validations: { required: true }
+  - type: input
+    id: summary
+    attributes:
+      label: One-line summary
+      description: What it does for someone running voidbase. One line, up to 160 characters.
+    validations: { required: true }
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options: [Auth, Content, Media, Operations, Payments, Search, Other]
+    validations: { required: true }
+  - type: dropdown
+    id: tags
+    attributes:
+      label: Tags
+      description: One to three.
+      multiple: true
+      options: [Auth, Backup, CMS, Commerce, Email, Files, i18n, Observability, Payments, Realtime, Search, SEO]
+    validations: { required: true }
+  - type: textarea
+    id: needs
+    attributes:
+      label: What would it need from voidbase?
+      description: Hooks, routes, collections, panel screens, background work. This is the part that shapes the loader, so vague is fine and specific is better.
+    validations: { required: false }

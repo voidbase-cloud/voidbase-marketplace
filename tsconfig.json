@@ -1,0 +1,18 @@
+{
+  "//": "Standalone on purpose: extending .voidbase/tsconfig.json makes every tool that walks up from here fail before the adapter has generated it.",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "noEmit": true,
+    "types": ["void/env", "vite/client", "bun"],
+    "paths": { "@/*": ["./src/*"] }
+  },
+  "include": ["src", "pages", "routes", "scripts", "vb_hooks"]
+}

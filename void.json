@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/void/schema.json",
+  "output": "static",
+  "target": "bun",
+  "worker": { "compatibility_date": "2026-09-06" },
+  "head": {
+    "title": "voidbase marketplace",
+    "htmlAttrs": { "lang": "en" },
+    "meta": [
+      { "charset": "UTF-8" },
+      { "name": "viewport", "content": "width=device-width, initial-scale=1.0" },
+      { "name": "description", "content": "Templates and plugins for voidbase, submitted by the people who wrote them. Early: you can list one, and you can start from a template on GitHub." },
+      { "name": "theme-color", "content": "#0b0b0d" },
+      { "property": "og:type", "content": "website" },
+      { "property": "og:title", "content": "voidbase marketplace" },
+      { "property": "og:description", "content": "Templates and plugins for voidbase, submitted by the people who wrote them." }
+    ]
+  }
+}

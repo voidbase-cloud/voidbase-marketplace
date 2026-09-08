@@ -1,0 +1,5 @@
+{
+  "$comment": "Accepted plugins. Empty on purpose: pb_plugins does not exist yet, so nothing here can be installed. Submissions are open so the shape of what people want is visible before the loader is designed around it.",
+  "schemaVersion": 1,
+  "entries": []
+}

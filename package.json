@@ -1,0 +1,29 @@
+{
+  "name": "voidbase-marketplace",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vp dev",
+    "build": "bunx --bun vite build",
+    "check": "bunx tsc --noEmit -p tsconfig.json",
+    "preview": "bun .voidbase/main.ts --http 127.0.0.1:8090",
+    "registry:check": "bun scripts/registry.ts check",
+    "submission:validate": "bun scripts/validate.ts",
+    "submission:approve": "bun scripts/approve.ts",
+    "deploy": "cd .voidbase && voidbase deploy"
+  },
+  "dependencies": {
+    "@void/react": "^0.10.13",
+    "@voidbase-cloud/voidbase": "^0.8.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.4.1",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "sass": "^1.104.0",
+    "vite": "^8.2.2",
+    "void": "^0.10.13"
+  }
+}

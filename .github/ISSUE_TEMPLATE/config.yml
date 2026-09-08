@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Ask on Discord
+    url: https://discord.gg/zYujFvVYgq
+    about: Questions about submitting, or about voidbase itself.
+  - name: voidbase documentation
+    url: https://voidbase.cloud/docs
+    about: How to run an instance, and what a template is starting you from.
+  - name: Report a problem with voidbase itself
+    url: https://github.com/voidbase-cloud/voidbase/issues
+    about: Bugs in the backend belong in the main repository, not here.

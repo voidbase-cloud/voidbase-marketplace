@@ -43,7 +43,7 @@ body:
       label: Tags
       description: One to three. More than three is refused.
       multiple: true
-      options: [Auth, Blog, Commerce, Content, Dashboard, Docs, Files, Minimal, Realtime, SaaS, Stack, TypeScript]
+      options: [Auth, Blog, Commerce, Content, Dashboard, Docs, Files, Minimal, Project, Realtime, SaaS, Stack, TypeScript]
     validations: { required: true }
   - type: checkboxes
     id: confirms

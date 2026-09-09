@@ -38,6 +38,8 @@ console.log(`listed ${entry.repository} as a ${kind} in ${entry.category || CATE
 // a plugin is also built, audited and served: the pipeline writes registry/v1/ and regenerates the index
 if (kind === "plugin") must(["bun", "scripts/bundle.ts", entry.repository]);
 
+// the deploy checks nothing, so the check happens here, before the listing can reach master
+must(["bun", "scripts/registry.ts", "check"]);
 must(["git", "add", "registry"]);
 must(["git", "commit", "-m", `feat(registry): list ${entry.repository} from #${issue.number}`]);
 if (process.argv.includes("--no-push")) { console.log("committed, not pushed (--no-push)"); process.exit(0); }

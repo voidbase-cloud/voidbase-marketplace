@@ -76,10 +76,11 @@ Worker. The instance holds nothing yet, because the registry is in git; it is he
 
 ## Deploying
 
-Every push builds on Cloudflare Workers Builds through the repository's connection: `bun run build` (the registry
-check, the site, the typecheck), then `bun run deploy` on master or `bun run version` on any other branch, with the
-root directory set to `/`. There are no GitHub Actions. Two settings have to exist on the trigger, under
-**Settings > Build > Variables and secrets**, because neither can live in this repository:
+Every push to master builds on Cloudflare Workers Builds through the repository's connection and syncs the
+instance: `bun run build` (Vite, into `.voidbase/`) and then `bun run deploy` (`voidbase sync`), root directory
+`/`, and nothing else. No checks run in the pipeline; `bun run registry:check` and `bun run check` are for a
+machine, and the approval command runs the registry check before it commits. Two settings have to exist on the
+trigger, under **Settings > Build > Variables and secrets**, because neither can live in this repository:
 
 | | | |
 | --- | --- | --- |

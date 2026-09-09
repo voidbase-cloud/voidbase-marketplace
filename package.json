@@ -4,15 +4,13 @@
   "type": "module",
   "scripts": {
     "dev": "vp dev",
-    "build": "bun scripts/pipeline.ts build",
+    "build": "bunx --bun vite build",
     "check": "bunx tsc --noEmit -p tsconfig.json",
     "preview": "bun .voidbase/main.ts --http 127.0.0.1:8090",
     "registry:check": "bun scripts/registry.ts check",
     "submission:validate": "bun scripts/validate.ts",
     "submission:approve": "bun scripts/approve.ts",
-    "deploy": "bun scripts/pipeline.ts deploy",
-    "build:app": "bunx --bun vite build",
-    "version": "bun scripts/pipeline.ts version",
+    "deploy": "bunx voidbase sync --name voidbase-marketplace --domain marketplace.voidbase.cloud",
     "registry:index": "bun scripts/registry-index.ts",
     "plugin:bundle": "bun scripts/bundle.ts"
   },

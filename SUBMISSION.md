@@ -20,7 +20,7 @@ A plugin is a repository with a `plugin.json` in its root (the manifest voidbase
 the voidbase range, the interfaces it provides and requires) and an entry point (`exports["."]` in package.json, or
 `src/index.ts`) whose default export is the plugin. You do not build or publish anything. Read this before spending
 time on it: a listing with a release is installable with `voidbase plugins add <name>` (voidbase 0.9.0-beta.7 or
-later) into an executable, a local instance or a project; stack apps and cloud instances cannot install yet.
+later) into an executable, a local instance, a project or a stack app, and from its page into a cloud instance.
 
 1. Make the repository public, give it a licence GitHub can identify, and write a README.
 2. Open the [plugin submission form](https://github.com/voidbase-cloud/voidbase-marketplace/issues/new?template=submit-plugin.yml).

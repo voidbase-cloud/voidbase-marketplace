@@ -23,7 +23,8 @@ marketplace serves into the project's `pb_plugins/<name>`, verifies it against t
 `voidbase.lock`; the instance verifies the bytes again every time it starts. A listed plugin is built here from its
 repository at a commit, audited, hashed and served under `/registry/v1/` as [the registry protocol](https://github.com/voidbase-cloud/voidbase/blob/master/docs/registry.md)
 says, which any marketplace can serve and any instance can read: an instance is not tied to this one, and
-`--marketplace <url>` installs from another. Not yet: stack apps and cloud instances.
+`--marketplace <url>` installs from another. A cloud instance installs from its page on voidbase.cloud, through a
+build the page shows.
 
 **There are no accounts, downloads or rankings.** Nothing to sign in to and nothing counted. If creators are ever
 able to charge for what they publish, it will be written down on

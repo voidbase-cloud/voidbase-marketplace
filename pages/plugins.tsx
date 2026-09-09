@@ -10,10 +10,10 @@ export default function Plugins() {
         Each plugin listed here is built by this marketplace from its repository at a commit, audited before and after
         the build, hashed, and served under <code>/registry/v1/</code> the way{" "}
         <a href="https://github.com/voidbase-cloud/voidbase/blob/master/docs/registry.md" target="_blank" rel="noreferrer noopener">the registry protocol</a>{" "}
-        says, which any marketplace can serve and any instance can read. Nothing can install one yet:{" "}
-        <code>pb_plugins</code> is on{" "}
-        <a href="https://voidbase.cloud/docs/roadmap" target="_blank" rel="noreferrer noopener">the roadmap</a>, so a
-        release here is what an instance will install once it can, and a listing without one is a registration.
+        says, which any marketplace can serve and any instance can read. An instance installs one with{" "}
+        <code>voidbase plugins add &lt;name&gt;</code> (voidbase 0.9.0-beta.7 or later): the bundle is verified against
+        the hash recorded here and pinned in the project's <code>voidbase.lock</code>. A listing without a release is a
+        registration.
       </p>
       {entries.length ? (
         <div className="cards">{entries.map((e) => <Card key={e.repository} entry={e} kind="plugin" />)}</div>

@@ -1,5 +1,5 @@
 name: Submit a plugin
-description: Register a plugin you have written or want to write, before plugins can be installed.
+description: Submit a plugin: a repository with a plugin.json. The marketplace builds, audits and serves it.
 title: "[Plugin]: "
 labels: ["submission", "plugin"]
 body:
@@ -7,8 +7,8 @@ body:
     attributes:
       value: |
         **Read this first.** voidbase has a plugin format and a loader (`plugin.json`, and the `@voidbase-cloud/plugin-*`
-        packages show the shape), but `pb_plugins` does not exist yet: nothing here can be installed, and this listing
-        does not make your plugin work with voidbase.
+        packages show the shape). Once listed, an instance installs it with `voidbase plugins add <name>`; the
+        marketplace builds the bundle from your repository, audits it and serves it, and a change is a new version.
 
         This form is open anyway, because installing is being designed and what people actually want to build
         should shape it. Submitting tells us what you would write and gets you told when the format lands.

@@ -1,5 +1,5 @@
 {
-  "$comment": "Accepted plugins: the listings. What is served for each (the version records and bundles the pipeline builds) is under registry/v1, and a listed plugin without a release there is a registration. Nothing can be installed into an instance yet: voidbase has the loader and the manifest format, but pb_plugins does not exist.",
+  "$comment": "Accepted plugins: the listings. What is served for each (the version records and bundles the pipeline builds) is under registry/v1, and an instance installs a release with voidbase plugins add <name>. A listed plugin without a release there is a registration.",
   "schemaVersion": 1,
   "entries": [
     {

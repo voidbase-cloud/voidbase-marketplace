@@ -1,7 +1,7 @@
 // One card in the listing, and the empty state that stands in for it.
 //
 // Every card says the same three things: what it is, who submitted it, and what you can do with it right now. The
-// last one is short on purpose. A template can be started from on GitHub; a plugin cannot be installed at all yet,
+// last one is short on purpose. A template can be started from on GitHub; a plugin with a release is one command away,
 // and pretending otherwise with a disabled Install button would be worse than saying so.
 import type { Entry } from "@/lib/registry";
 import { RELEASES, registryUrl, repoUrl, useTemplateUrl } from "@/lib/listings";
@@ -30,7 +30,7 @@ export function Card({ entry, kind }: { entry: Entry; kind: "template" | "plugin
             <a href={registryUrl(latest.bundle)} title={latest.integrity}>bundle {release.latest}</a>
             {" · "}{latest.bytes} bytes{" · "}
             <a href={registryUrl(`plugins/${release.name}/${release.latest}.json`)}>record</a>
-            {" · "}<span className="not-yet" title="pb_plugins does not exist yet">not installable yet</span>
+            {" · "}<code className="install" title="voidbase 0.9.0-beta.7 or later">voidbase plugins add {release.name}</code>
           </span>
         ) : (
           <span className="not-yet" title="pb_plugins does not exist yet">Registered, no release yet</span>

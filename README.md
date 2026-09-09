@@ -18,11 +18,12 @@ This is early, and the useful thing to say about an early marketplace is what it
 **You can list a template, and you can start from one.** Starting is GitHub's own *Use this template* button, which
 clones the repository into your account. That is the entire install mechanism and it is somebody else's.
 
-**You cannot install a plugin yet, but the release is real.** A listed plugin is built here from its repository at a
-commit, audited, hashed and served under `/registry/v1/` as [the registry protocol](https://github.com/voidbase-cloud/voidbase/blob/master/docs/registry.md)
-says. voidbase has the manifest format and the loader (the three plugins it ships arrive through them); what it does
-not have yet is `pb_plugins`, so nothing here can be installed into an instance. When it can, it installs what this
-marketplace serves, or what any other marketplace serving the same protocol does: an instance is not tied to this one.
+**You can install a plugin** (voidbase 0.9.0-beta.7 or later): `voidbase plugins add <name>` downloads the release this
+marketplace serves into the project's `pb_plugins/<name>`, verifies it against the hash recorded here, and pins it in
+`voidbase.lock`; the instance verifies the bytes again every time it starts. A listed plugin is built here from its
+repository at a commit, audited, hashed and served under `/registry/v1/` as [the registry protocol](https://github.com/voidbase-cloud/voidbase/blob/master/docs/registry.md)
+says, which any marketplace can serve and any instance can read: an instance is not tied to this one, and
+`--marketplace <url>` installs from another. Not yet: stack apps and cloud instances.
 
 **There are no accounts, downloads or rankings.** Nothing to sign in to and nothing counted. If creators are ever
 able to charge for what they publish, it will be written down on

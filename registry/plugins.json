@@ -3,6 +3,19 @@
   "schemaVersion": 1,
   "entries": [
     {
+      "repository": "voidbase-cloud/voidbase-plugin-auth",
+      "title": "Auth",
+      "summary": "Who is making a request, what a superuser is, which collections hold accounts: password, OAuth2, OTP, MFA and passkeys. The core plugin providing auth@1.",
+      "submittedBy": "MahmoodKhalil57",
+      "issue": 4,
+      "listedOn": "2026-09-09",
+      "category": "Auth",
+      "tags": [
+        "Auth",
+        "Security"
+      ]
+    },
+    {
       "repository": "voidbase-cloud/voidbase-plugin-backups",
       "title": "Backups",
       "summary": "PocketBase's backups API: create, list, download, upload and restore archives kept in the instance's own R2 bucket.",

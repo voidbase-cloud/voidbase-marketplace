@@ -33,7 +33,7 @@ export function Card({ entry, kind }: { entry: Entry; kind: "template" | "plugin
             {" · "}<code className="install" title="voidbase 0.9.0-beta.7 or later">voidbase plugins add {release.name}</code>
           </span>
         ) : (
-          <span className="not-yet" title="pb_plugins does not exist yet">Registered, no release yet</span>
+          <span className="not-yet" title="listed, and not yet built into a release the marketplace serves">Registered, no release yet</span>
         )}
       </footer>
       {audit && (

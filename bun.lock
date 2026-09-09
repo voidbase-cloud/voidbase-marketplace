@@ -6,7 +6,7 @@
       "name": "voidbase-marketplace",
       "dependencies": {
         "@void/react": "^0.10.13",
-        "@voidbase-cloud/voidbase": "0.9.0-beta.2",
+        "@voidbase-cloud/voidbase": "0.9.0-beta.4",
         "react": "^19.2.8",
         "react-dom": "^19.2.8",
       },
@@ -443,7 +443,7 @@
 
     "@void/react": ["@void/react@0.10.13", "", { "dependencies": { "@vitejs/plugin-react": "^6.0.3" }, "peerDependencies": { "react": "^19.0.0", "react-dom": "^19.0.0", "vite": "^8.0.0", "void": "0.10.13" } }, "sha512-5aYko0xjF34QJllczCqpqWAH5K4vfzAnvfpTdjTYo2fydTtpVejkVgvFBz+dArDY+SkH/4PRz7o+MZl1u8JA+A=="],
 
-    "@voidbase-cloud/voidbase": ["@voidbase-cloud/voidbase@0.9.0-beta.2", "", { "dependencies": { "@cf-wasm/photon": "^0.4.0", "@cloudflare/workers-types": "^4.20250903.0", "@simplewebauthn/server": "^14.0.1", "bcryptjs": "^3.0.2", "fflate": "^0.8.3", "hono": "^4.11.9", "typescript": "^5.9.3", "vite": "^8.0.10", "vite-plus": "^0.1.21", "void": "^0.10.13" }, "bin": { "voidbase": "bin/voidbase.ts" } }, "sha512-4LHMAwl7CJtFypicTraAR+lpKOEuRXQ/fJNZC1xBvJdNfgG070cPuUIgWOvFJIgrnpwwf6O1PdUYIjkavh0JQw=="],
+    "@voidbase-cloud/voidbase": ["@voidbase-cloud/voidbase@0.9.0-beta.4", "", { "dependencies": { "@cf-wasm/photon": "^0.4.0", "@cloudflare/workers-types": "^4.20250903.0", "@simplewebauthn/server": "^14.0.1", "bcryptjs": "^3.0.2", "cordis": "4.0.0-rc.9", "fflate": "^0.8.3", "hono": "^4.11.9", "typescript": "^5.9.3", "vite": "^8.0.10", "vite-plus": "^0.1.21", "void": "^0.10.13" }, "bin": { "voidbase": "bin/voidbase.ts" } }, "sha512-bsCoKDAsG/hgpdeCX42ZTYoHx9FGGLs5LWhhQBSA6P9AtnSzSKvSbqog3J7Gxf1zIgpXs879S4ziY4m1dnbqLA=="],
 
     "@voidzero-dev/vite-plus-core": ["@voidzero-dev/vite-plus-core@0.1.24", "", { "dependencies": { "@oxc-project/runtime": "=0.133.0", "@oxc-project/types": "=0.133.0", "lightningcss": "^1.30.2", "postcss": "^8.5.6" }, "optionalDependencies": { "fsevents": "~2.3.3" }, "peerDependencies": { "@arethetypeswrong/core": "^0.18.1", "@tsdown/css": "0.22.1", "@tsdown/exe": "0.22.1", "@types/node": "^20.19.0 || >=22.12.0", "@vitejs/devtools": "^0.1.18", "esbuild": "^0.27.0 || ^0.28.0", "jiti": ">=1.21.0", "less": "^4.0.0", "publint": "^0.3.8", "sass": "^1.70.0", "sass-embedded": "^1.70.0", "stylus": ">=0.54.8", "sugarss": "^5.0.0", "terser": "^5.16.0", "tsx": "^4.8.1", "typescript": "^5.0.0 || ^6.0.0", "unplugin-unused": "^0.5.0", "unrun": "*", "yaml": "^2.4.2" }, "optionalPeers": ["@arethetypeswrong/core", "@tsdown/css", "@tsdown/exe", "@types/node", "@vitejs/devtools", "esbuild", "jiti", "less", "publint", "sass", "sass-embedded", "stylus", "sugarss", "terser", "tsx", "typescript", "unplugin-unused", "unrun", "yaml"] }, "sha512-iXPGBABnQnrDMx89H6MOCGcTZp+QW+3rY4YMVKdE6ydchSvPk2O3MI2vgaRVfOtWJ2IjnxSnf1n2yjP67ZBRFQ=="],
 
@@ -506,6 +506,10 @@
     "chownr": ["chownr@1.1.4", "", {}, "sha512-jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg=="],
 
     "cookie": ["cookie@1.1.1", "", {}, "sha512-ei8Aos7ja0weRpFzJnEA9UHJ/7XQmqglbRwnf2ATjcB9Wq874VKH9kfjjirM6UhU2/E5fFYadylyhFldcqSidQ=="],
+
+    "cordis": ["cordis@4.0.0-rc.9", "", { "dependencies": { "@standard-schema/spec": "^1.1.0", "cosmokit": "^1.8.1" }, "peerDependencies": { "@cordisjs/plugin-include": "^1.0.5", "@cordisjs/plugin-loader": "^1.0.0-rc.6" }, "optionalPeers": ["@cordisjs/plugin-include", "@cordisjs/plugin-loader"], "bin": "bin.js" }, "sha512-Y18SoewBvJ0eTZK7lHSQ5xl5YT1OWwoqFI92UrtpSAZyjUcW7cIEAOgOBVFp7PtO605vx6gBWdiOVaxY6UmSGw=="],
+
+    "cosmokit": ["cosmokit@1.8.1", "", {}, "sha512-PDBv4l90xZKrUsZ0vtoycgZpO/j4iFsqJXrAxsyBDsnQRI7ZMJXIjgDJsKNjd5L8jnVnnlrDCdhkFbTncgCVjQ=="],
 
     "csstype": ["csstype@3.2.3", "", {}, "sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ=="],
 

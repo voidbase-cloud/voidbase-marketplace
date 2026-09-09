@@ -17,9 +17,12 @@ This is early, and the useful thing to say about an early marketplace is what it
 **You can list a template, and you can start from one.** Starting is GitHub's own *Use this template* button, which
 clones the repository into your account. That is the entire install mechanism and it is somebody else's.
 
-**You cannot install a plugin.** `pb_plugins` does not exist. There is no manifest format, no loader, and nothing to
-install into. Plugin submissions are open anyway, because the loader is being designed and what people actually want
-to build should shape it rather than the other way round. A plugin listing here is a registration, not a release.
+**You cannot install a plugin yet.** voidbase has a manifest format and a loader: the three plugins it ships (backups,
+realtime and the request limits) arrive through them, and each is also a package under
+[voidbase-cloud](https://github.com/orgs/voidbase-cloud/repositories?q=voidbase-plugin) on GitHub Packages. But
+`pb_plugins` does not exist, so nothing listed here can be installed into an instance. Plugin submissions are open
+anyway, because installing is being designed now and what people actually want to build should shape it rather than
+the other way round. A plugin listing here is a registration, not a release.
 
 **There are no accounts, downloads or rankings.** Nothing to sign in to and nothing counted. If creators are ever
 able to charge for what they publish, it will be written down on

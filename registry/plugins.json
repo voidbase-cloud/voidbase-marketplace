@@ -1,5 +1,5 @@
 {
-  "$comment": "Accepted plugins. Empty on purpose: pb_plugins does not exist yet, so nothing here can be installed. Submissions are open so the shape of what people want is visible before the loader is designed around it.",
+  "$comment": "Accepted plugins. Nothing here can be installed yet: voidbase has a loader and a manifest format, but pb_plugins does not exist. The official plugins voidbase ships are listed so the marketplace names what exists; submissions are open so the shape of what people want is visible before installing is designed around it.",
   "schemaVersion": 1,
   "entries": []
 }

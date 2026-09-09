@@ -1,15 +1,16 @@
 name: Submit a plugin
-description: Register a plugin you have written or want to write, before the plugin format exists.
+description: Register a plugin you have written or want to write, before plugins can be installed.
 title: "[Plugin]: "
 labels: ["submission", "plugin"]
 body:
   - type: markdown
     attributes:
       value: |
-        **Read this first.** `pb_plugins` does not exist yet. There is no format to build against, nothing here can
-        be installed, and this listing does not make your plugin work with voidbase.
+        **Read this first.** voidbase has a plugin format and a loader (`plugin.json`, and the `@voidbase-cloud/plugin-*`
+        packages show the shape), but `pb_plugins` does not exist yet: nothing here can be installed, and this listing
+        does not make your plugin work with voidbase.
 
-        This form is open anyway, because the plugin loader is being designed and what people actually want to build
+        This form is open anyway, because installing is being designed and what people actually want to build
         should shape it. Submitting tells us what you would write and gets you told when the format lands.
   - type: input
     id: repository
@@ -42,7 +43,7 @@ body:
       label: Tags
       description: One to three.
       multiple: true
-      options: [Auth, Backup, CMS, Commerce, Email, Files, i18n, Observability, Payments, Realtime, Search, SEO]
+      options: [Auth, Backup, CMS, Commerce, Email, Files, i18n, Observability, Payments, Realtime, Search, Security, SEO]
     validations: { required: true }
   - type: textarea
     id: needs

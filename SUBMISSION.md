@@ -16,11 +16,11 @@ and decides. Nothing is listed automatically and nothing is rejected automatical
 
 ## A plugin
 
-Read this before spending time on it: there is no plugin format yet, nothing listed can be installed, and a listing
-does not make a plugin work with voidbase.
+Read this before spending time on it: voidbase has a plugin format and a loader, but nothing can be installed into an
+instance yet, and a listing does not make a plugin work with voidbase.
 
 The [plugin form](https://github.com/voidbase-cloud/voidbase-marketplace/issues/new?template=submit-plugin.yml) asks
-what your plugin would need from voidbase. That answer is the useful part, because the loader is being designed now
+what your plugin would need from voidbase. That answer is the useful part, because installing is being designed now
 and the answers are what it should be designed around.
 
 ## What the audit checks

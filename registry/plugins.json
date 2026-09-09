@@ -16,6 +16,18 @@
       ]
     },
     {
+      "repository": "voidbase-cloud/voidbase-plugin-hardening",
+      "title": "Hardening",
+      "summary": "PocketBase's rate limit rules and the 32 MB body limit, met by every request before a route. Provides hardening@1.",
+      "submittedBy": "MahmoodKhalil57",
+      "issue": 3,
+      "listedOn": "2026-09-09",
+      "category": "Operations",
+      "tags": [
+        "Security"
+      ]
+    },
+    {
       "repository": "voidbase-cloud/voidbase-plugin-realtime",
       "title": "Realtime",
       "summary": "Realtime subscriptions over SSE, fanned out by the instance's hub Durable Object, with presence. Provides realtime@1.",

@@ -1,5 +1,5 @@
 // The GitHub calls the submission scripts make. Read-only against the submitted repository, authenticated only so
-// the rate limit is the workflow's rather than the runner's.
+// the rate limit is the token's rather than the machine's.
 import { mkdirSync, rmSync } from "node:fs";
 
 const API = process.env.GITHUB_API_URL || "https://api.github.com";

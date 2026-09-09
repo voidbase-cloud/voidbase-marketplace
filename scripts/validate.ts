@@ -1,17 +1,15 @@
-// What runs when somebody opens a submission: read the form, check the rules, audit a template, and write one
-// comment saying exactly what a maintainer would otherwise have to work out by hand.
+// What a maintainer runs on a submission: read the form, check the rules, audit a template, and write one comment
+// saying exactly what they would otherwise have to work out by hand.
 //
-//   bun scripts/validate.ts            reads the issue from the environment GitHub Actions provides
+//   bun scripts/validate.ts --issue <number>            prints the audit
+//   bun scripts/validate.ts --issue <number> --post     and posts it on the issue as a comment
 //
 // It never approves anything. Its whole job is to make the decision cheap for the person who does.
-import { appendFileSync } from "node:fs";
 import { problemsWith, readRegistry, type Kind } from "../src/lib/registry";
 import { auditTemplate, renderReport } from "./audit";
-import { kindOf, parseSubmission, toEntry } from "./submission";
+import { kindOf, must, parseSubmission, readIssue, REPO, toEntry } from "./submission";
 
-const event = process.env.GITHUB_EVENT_PATH ? JSON.parse(await Bun.file(process.env.GITHUB_EVENT_PATH).text()) : null;
-const issue = event?.issue as { number: number; title: string; body: string; user: { login: string }; labels: { name: string }[] } | undefined;
-if (!issue) { console.error("no issue in the event payload: this runs from GitHub Actions"); process.exit(2); }
+const issue = readIssue();
 
 const kind: Kind | null = kindOf(issue.labels.map((l) => l.name), issue.title);
 if (!kind) { console.log("not a submission issue; nothing to do"); process.exit(0); }
@@ -31,7 +29,7 @@ if (problems.length) {
   // Deliberately unaudited: there is no plugin format yet to audit against.
   lines.push("The form is complete.", "");
   lines.push(
-    "Plugins are not audited yet, because `pb_plugins` does not exist and there is nothing to check a manifest or a set of permissions against. This submission is recorded so the shape of what people want is visible while that is being designed, and a maintainer will decide whether to list it.",
+    "The plugin is audited when it is listed: `bun run submission:approve -- --issue <number>` builds it from the repository at its current commit, audits the source and the bundle, and records what it found with the version.",
   );
 } else {
   const { report, commit, blocking } = await auditTemplate(parsed.repository!);
@@ -43,8 +41,9 @@ if (problems.length) {
 
 const comment = lines.join("\n");
 console.log(comment);
-await Bun.write("comment.md", `${comment}\n`);
-// the workflow reads these to label the issue. GITHUB_OUTPUT is appended to, never written over: other steps in the
-// same job write to the same file and Bun.write would truncate what they put there.
-if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, `kind=${kind}\nok=${problems.length === 0}\n`);
+if (process.argv.includes("--post")) {
+  await Bun.write("comment.md", `${comment}\n`);
+  must(["gh", "issue", "comment", String(issue.number), "--repo", REPO, "--body-file", "comment.md"]);
+  console.log(`\nposted on #${issue.number}`);
+}
 process.exit(0);

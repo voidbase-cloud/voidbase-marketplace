@@ -1,7 +1,7 @@
 // `bun scripts/registry.ts check` — the registry files are valid and say what they claim to.
 //
-// This runs in CI on every push, because the registry is edited by a workflow and by people, and a listing that
-// fails to parse takes the whole site down with it.
+// The Cloudflare build runs this first on every push (scripts/pipeline.ts), because the registry is edited by the
+// approval command and by people, and a listing that fails to parse takes the whole site down with it.
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { integrityOf, problemsWithIndex, type RegistryIndex } from "@voidbase-cloud/voidbase/registry";

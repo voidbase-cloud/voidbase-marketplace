@@ -3,7 +3,7 @@
 //   bun scripts/bundle.ts <owner/name> [ref] [--force]   audit the source, bundle it, audit the bundle, hash it,
 //                                                          write registry/v1/plugins/<name>/<version>.json and the
 //                                                          bundle beside it, and regenerate registry/v1/index.json
-//   bun scripts/bundle.ts --from-issue                     the same, for the plugin the submission issue names
+//   bun scripts/bundle.ts --issue <number>                 the same, for the plugin the submission issue names
 //
 // The marketplace builds and audits; it never runs the plugin. Everything it writes is what an instance verifies for
 // itself: the bundle's bytes against the record's integrity, and the loaded bundle's manifest against the record's
@@ -17,7 +17,7 @@ import { normalizeRepository } from "../src/lib/registry";
 import { SMELLS } from "./audit";
 import { checkoutAt, repoFacts, resolveRef } from "./github";
 import { REGISTRY_DIR, writeIndex } from "./registry-index";
-import { kindOf, parseSubmission } from "./submission";
+import { kindOf, parseSubmission, readIssue } from "./submission";
 
 export interface Check { name: string; passed: boolean; detail: string }
 export interface Built { name: string; version: string; integrity: string; bytes: number; commit: string; checks: Check[]; blocking: string[]; written: boolean }
@@ -150,16 +150,14 @@ if (import.meta.main) {
   const args = process.argv.slice(2);
   const force = args.includes("--force");
   let repository: string | undefined; let ref: string | undefined;
-  if (args.includes("--from-issue")) {
-    const event = process.env.GITHUB_EVENT_PATH ? JSON.parse(await Bun.file(process.env.GITHUB_EVENT_PATH).text()) : null;
-    const issue = event?.issue as { title: string; body: string; labels: { name: string }[] } | undefined;
-    if (!issue) { console.error("no issue in the event payload: this runs from GitHub Actions"); process.exit(2); }
+  if (args.includes("--issue")) {
+    const issue = readIssue(args);
     if (kindOf(issue.labels.map((l) => l.name), issue.title) !== "plugin") { console.log("not a plugin submission; nothing to bundle"); process.exit(0); }
-    repository = parseSubmission(issue.body ?? "", "plugin").repository ?? undefined;
+    repository = parseSubmission(issue.body, "plugin").repository ?? undefined;
   } else {
     [repository, ref] = args.filter((a) => !a.startsWith("--"));
   }
-  if (!repository) { console.error("usage: bun scripts/bundle.ts <owner/name> [ref] [--force]  |  bun scripts/bundle.ts --from-issue"); process.exit(2); }
+  if (!repository) { console.error("usage: bun scripts/bundle.ts <owner/name> [ref] [--force]  |  bun scripts/bundle.ts --issue <number>"); process.exit(2); }
   const built = await bundlePlugin(repository, ref, { force });
   for (const c of built.checks) console.log(`${c.passed ? "PASS" : "FAIL"}  ${c.name}: ${c.detail}`);
   if (built.blocking.length) { console.error(`\n${repository} was not published:\n${built.blocking.map((b) => `  - ${b}`).join("\n")}`); process.exit(1); }

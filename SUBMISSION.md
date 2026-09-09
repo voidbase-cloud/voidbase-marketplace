@@ -1,7 +1,7 @@
 # Submitting
 
-A submission is a GitHub issue. Opening one runs the checks below and posts what they found; a maintainer reads that
-and decides. Nothing is listed automatically and nothing is rejected automatically.
+A submission is a GitHub issue. A maintainer runs the checks below on it and posts what they found, reads that and
+decides. Nothing is listed automatically and nothing is rejected automatically.
 
 ## A template
 
@@ -10,9 +10,10 @@ and decides. Nothing is listed automatically and nothing is rejected automatical
 2. Turn on **Template repository** in the repository settings, so *Use this template* works. This is how anyone
    listed here is actually used.
 3. Open the [template submission form](https://github.com/voidbase-cloud/voidbase-marketplace/issues/new?template=submit-template.yml).
-4. Within a minute or two a comment appears with the audit. If something is wrong, edit the issue: that runs it
-   again.
-5. A maintainer labels it `approved`, which commits the listing to `registry/templates.json` and closes the issue.
+4. A maintainer runs the audit (`bun run submission:validate -- --issue <n> --post`), and a comment appears with
+   what it found. If something is wrong, edit the issue and ask for another run.
+5. A maintainer approves it (`bun run submission:approve -- --issue <n>`), which commits the listing to
+   `registry/templates.json`, pushes it and closes the issue.
 
 ## A plugin
 
@@ -24,10 +25,12 @@ later) into an executable, a local instance, a project or a stack app, and from 
 
 1. Make the repository public, give it a licence GitHub can identify, and write a README.
 2. Open the [plugin submission form](https://github.com/voidbase-cloud/voidbase-marketplace/issues/new?template=submit-plugin.yml).
-3. A maintainer labels it `approved`, which lists it in `registry/plugins.json` and runs the pipeline: the repository
-   at its current commit is audited, bundled, audited again, hashed and written under `registry/v1/`, and served
-   from `/registry/v1/`. What every check found is recorded with the version, so you can read it and disagree.
-4. A new version is a new commit and a run of the `bundle` workflow against it; a published version never changes.
+3. A maintainer approves it (`bun run submission:approve -- --issue <n>`), which lists it in `registry/plugins.json`
+   and runs the pipeline: the repository at its current commit is audited, bundled, audited again, hashed and
+   written under `registry/v1/`, pushed, and served from `/registry/v1/`. What every check found is recorded with
+   the version, so you can read it and disagree.
+4. A new version is a new commit of your repository and a maintainer's `bun run plugin:bundle <owner/name> [ref]`
+   against it, pushed; a published version never changes. Open an issue to ask for one.
 
 ## What the audit checks
 

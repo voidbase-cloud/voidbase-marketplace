@@ -54,7 +54,7 @@ against voidbase's `checkManifest`, interfaces voidbase defines, an entry point,
 dependencies without running their scripts, bundle with Bun (what an instance provides stays an import: voidbase's
 entry points and hono; everything else is inlined), audit the bundle (imports only what an instance provides, a
 default export, size, nothing alarming), hash it, write the record and regenerate the index. A version is immutable;
-a change is a new version. It runs on approval and from the `bundle` workflow by hand.
+a change is a new version. The approval command runs it, and a maintainer runs it by hand for a new version.
 
 ## Working on it
 
@@ -62,19 +62,24 @@ a change is a new version. It runs on approval and from the `bundle` workflow by
 bun install
 bun run dev              # the site
 bun run registry:check   # the listings are valid, the index is fresh and readable by an instance, every bundle matches its record
-bun run plugin:bundle <owner/name> [ref]   # build, audit and publish a plugin version (needs GH_TOKEN)
+bun run plugin:bundle <owner/name> [ref]   # build, audit and publish a plugin version (needs GH_TOKEN); commit and push it
 bun run check            # typecheck
 bun run build            # production build, prerendered into .voidbase/pb_public
 ```
+
+Submissions are GitHub issues, and a maintainer handles them from a machine with `gh` signed in:
+`bun run submission:validate -- --issue <n> --post` audits one and comments, `bun run submission:approve -- --issue <n>`
+lists it (and builds a plugin), commits, pushes, answers and closes it. The push builds and deploys the site.
 
 It is a [voidbase stack app](https://voidbase.cloud/docs/run/stack): pages, the API and the instance build into one
 Worker. The instance holds nothing yet, because the registry is in git; it is here for what comes after listing.
 
 ## Deploying
 
-Cloudflare Workers Builds calls `bun run build`, `bun run deploy` and `bun run version` with the root directory
-set to `/`. Two settings have to exist on the trigger, under **Settings > Build > Variables and secrets**, because
-neither can live in this repository:
+Every push builds on Cloudflare Workers Builds through the repository's connection: `bun run build` (the registry
+check, the site, the typecheck), then `bun run deploy` on master or `bun run version` on any other branch, with the
+root directory set to `/`. There are no GitHub Actions. Two settings have to exist on the trigger, under
+**Settings > Build > Variables and secrets**, because neither can live in this repository:
 
 | | | |
 | --- | --- | --- |

@@ -20,9 +20,10 @@ jobs:
       - name: Bump to the latest release when behind
         id: bump
         run: |
-          latest=$(npm view @voidbase-cloud/voidbase version)
-          pinned=$(jq -r .dependencies[@voidbase-cloud/voidbase] package.json)
+          latest=$(curl -sS https://registry.npmjs.org/@voidbase-cloud%2Fvoidbase/latest | jq -r .version)
+          pinned=$(jq -r '.dependencies["@voidbase-cloud/voidbase"]' package.json)
           echo "pinned $pinned, latest $latest"
+          [ -n "$latest" ] && [ "$latest" != "null" ] || { echo "could not read the latest version"; exit 1; }
           if [ "$pinned" = "$latest" ]; then echo "up to date"; exit 0; fi
           bun add --exact "@voidbase-cloud/voidbase@$latest"
           git config user.name "voidbase-bot"

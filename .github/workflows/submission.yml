@@ -10,6 +10,13 @@ on:
   issues:
     types: [opened, edited, labeled, reopened]
 
+# One run at a time: an approval commits to master, and two approvals labelled within seconds of each other raced on
+# the push (the second was rejected and its listing lost until the label was re-applied). The group covers every
+# run, so a validation waits behind a listing rather than racing it.
+concurrency:
+  group: registry
+  cancel-in-progress: false
+
 permissions:
   contents: read
   issues: write

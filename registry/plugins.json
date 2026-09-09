@@ -1,5 +1,19 @@
 {
   "$comment": "Accepted plugins. Nothing here can be installed yet: voidbase has a loader and a manifest format, but pb_plugins does not exist. The official plugins voidbase ships are listed so the marketplace names what exists; submissions are open so the shape of what people want is visible before installing is designed around it.",
   "schemaVersion": 1,
-  "entries": []
+  "entries": [
+    {
+      "repository": "voidbase-cloud/voidbase-plugin-backups",
+      "title": "Backups",
+      "summary": "PocketBase's backups API: create, list, download, upload and restore archives kept in the instance's own R2 bucket.",
+      "submittedBy": "MahmoodKhalil57",
+      "issue": 1,
+      "listedOn": "2026-09-09",
+      "category": "Operations",
+      "tags": [
+        "Backup",
+        "Files"
+      ]
+    }
+  ]
 }

@@ -12,11 +12,13 @@
     "submission:approve": "bun scripts/approve.ts",
     "deploy": "bun scripts/pipeline.ts deploy",
     "build:app": "bunx --bun vite build",
-    "version": "bun scripts/pipeline.ts version"
+    "version": "bun scripts/pipeline.ts version",
+    "registry:index": "bun scripts/registry-index.ts",
+    "plugin:bundle": "bun scripts/bundle.ts"
   },
   "dependencies": {
     "@void/react": "^0.10.13",
-    "@voidbase-cloud/voidbase": "0.9.0-beta.4",
+    "@voidbase-cloud/voidbase": "0.9.0-beta.6",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },

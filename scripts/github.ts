@@ -1,5 +1,7 @@
 // The GitHub calls the submission scripts make. Read-only against the submitted repository, authenticated only so
 // the rate limit is the workflow's rather than the runner's.
+import { mkdirSync, rmSync } from "node:fs";
+
 const API = process.env.GITHUB_API_URL || "https://api.github.com";
 const token = () => process.env.GH_TOKEN || process.env.GITHUB_TOKEN || "";
 
@@ -59,4 +61,25 @@ export async function fileAt(repository: string, ref: string, path: string): Pro
   const { body } = await gh<{ content?: string; encoding?: string }>(`/repos/${repository}/contents/${path}?ref=${encodeURIComponent(ref)}`);
   if (!body?.content) return null;
   return body.encoding === "base64" ? Buffer.from(body.content, "base64").toString("utf8") : body.content;
+}
+
+/** the commit a ref names: a branch, a tag or a sha */
+export async function resolveRef(repository: string, ref: string): Promise<string | null> {
+  const { body } = await gh<{ sha: string }>(`/repos/${repository}/commits/${encodeURIComponent(ref)}`);
+  return body?.sha ?? null;
+}
+
+/** the repository at one commit, unpacked into `dest`: GitHub's tarball, its one top-level directory stripped */
+export async function checkoutAt(repository: string, sha: string, dest: string): Promise<void> {
+  const res = await fetch(`${API}/repos/${repository}/tarball/${sha}`, {
+    headers: { accept: "application/vnd.github+json", "user-agent": "voidbase-marketplace", ...(token() ? { authorization: `Bearer ${token()}` } : {}) },
+    redirect: "follow",
+  });
+  if (!res.ok) throw new Error(`GitHub tarball for ${repository}@${sha}: HTTP ${res.status}`);
+  const file = `${dest}.tar.gz`;
+  await Bun.write(file, await res.arrayBuffer());
+  mkdirSync(dest, { recursive: true });
+  const tar = Bun.spawnSync(["tar", "-xzf", file, "--strip-components=1", "-C", dest]);
+  rmSync(file, { force: true });
+  if (tar.exitCode !== 0) throw new Error(`could not unpack ${repository}@${sha}: ${tar.stderr.toString()}`);
 }

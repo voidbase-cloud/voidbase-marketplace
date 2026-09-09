@@ -1,0 +1,110 @@
+{
+  "version": "0.1.0",
+  "manifest": {
+    "name": "hardening",
+    "version": "0.1.0",
+    "tier": "official",
+    "voidbase": ">=0.9.0-beta.5",
+    "provides": [
+      "hardening@1"
+    ]
+  },
+  "integrity": "sha256-kYlewauSyoAmz64iYIrWLMAW+hsGyLy9LzlFn7W4U9s=",
+  "bundle": "plugins/hardening/0.1.0/bundle.js",
+  "bytes": 424,
+  "source": {
+    "repository": "voidbase-cloud/voidbase-plugin-hardening",
+    "commit": "f96c57189e11f6c32903a4be5f5193e618558a72"
+  },
+  "publishedOn": "2026-09-09",
+  "audit": {
+    "ranOn": "2026-09-09T01:01:35.183Z",
+    "checks": [
+      {
+        "name": "public repository",
+        "passed": true,
+        "detail": "reachable without signing in"
+      },
+      {
+        "name": "not archived",
+        "passed": true,
+        "detail": "actively owned"
+      },
+      {
+        "name": "has a licence",
+        "passed": true,
+        "detail": "MIT, from GitHub's own detection"
+      },
+      {
+        "name": "has a commit to build from",
+        "passed": true,
+        "detail": "f96c57189e11 (master)"
+      },
+      {
+        "name": "has a plugin.json",
+        "passed": true,
+        "detail": "present"
+      },
+      {
+        "name": "the manifest is valid",
+        "passed": true,
+        "detail": "hardening 0.1.0, tier official, voidbase >=0.9.0-beta.5"
+      },
+      {
+        "name": "names only interfaces voidbase defines",
+        "passed": true,
+        "detail": "hardening@1"
+      },
+      {
+        "name": "has an entry point",
+        "passed": true,
+        "detail": "src/index.ts"
+      },
+      {
+        "name": "nothing obviously alarming in the source",
+        "passed": true,
+        "detail": "read 5 file(s)"
+      },
+      {
+        "name": "has a README",
+        "passed": true,
+        "detail": "present"
+      },
+      {
+        "name": "dependencies install without running scripts",
+        "passed": true,
+        "detail": "bun install --ignore-scripts"
+      },
+      {
+        "name": "bundles into one module",
+        "passed": true,
+        "detail": "1 output(s), target browser, format esm"
+      },
+      {
+        "name": "imports only what an instance provides",
+        "passed": true,
+        "detail": "@voidbase-cloud/voidbase/plugins/hardening"
+      },
+      {
+        "name": "exports the plugin as its default export",
+        "passed": true,
+        "detail": "the loader takes the default export"
+      },
+      {
+        "name": "nothing obviously alarming in the bundle",
+        "passed": true,
+        "detail": "read the whole bundle"
+      },
+      {
+        "name": "is small enough to read",
+        "passed": true,
+        "detail": "424 bytes"
+      },
+      {
+        "name": "the manifest is the source's",
+        "passed": true,
+        "detail": "plugin.json at f96c57189e11; an instance checks the loaded bundle says the same"
+      }
+    ]
+  }
+}

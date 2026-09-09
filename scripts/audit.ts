@@ -12,7 +12,7 @@ import type { AuditReport } from "../src/lib/registry";
 import { fileAt, headCommit, repoFacts, rootPaths } from "./github";
 
 /** things that are worth a human looking twice, not things that are proof of anything */
-const SMELLS: [RegExp, string][] = [
+export const SMELLS: [RegExp, string][] = [
   [/curl[^\n|]*\|\s*(sudo\s+)?(ba)?sh/i, "pipes a download straight into a shell"],
   [/\beval\s*\(/, "calls eval"],
   [/child_process|Bun\.\$|execSync/, "runs other programs"],

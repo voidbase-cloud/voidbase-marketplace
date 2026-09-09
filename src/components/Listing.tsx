@@ -4,11 +4,13 @@
 // last one is short on purpose. A template can be started from on GitHub; a plugin cannot be installed at all yet,
 // and pretending otherwise with a disabled Install button would be worse than saying so.
 import type { Entry } from "@/lib/registry";
-import { repoUrl, useTemplateUrl } from "@/lib/listings";
+import { RELEASES, registryUrl, repoUrl, useTemplateUrl } from "@/lib/listings";
 
 export function Card({ entry, kind }: { entry: Entry; kind: "template" | "plugin" }) {
   const audit = entry.audit;
   const failed = audit?.checks.filter((c) => !c.passed) ?? [];
+  const release = kind === "plugin" ? RELEASES.get(entry.repository) : undefined;
+  const latest = release?.versions.find((v) => v.version === release.latest);
   return (
     <article className="card">
       <header>
@@ -23,8 +25,15 @@ export function Card({ entry, kind }: { entry: Entry; kind: "template" | "plugin
           <a className="btn" href={useTemplateUrl(entry.repository)} target="_blank" rel="noreferrer noopener">
             Use this template
           </a>
+        ) : release && latest ? (
+          <span className="release">
+            <a href={registryUrl(latest.bundle)} title={latest.integrity}>bundle {release.latest}</a>
+            {" · "}{latest.bytes} bytes{" · "}
+            <a href={registryUrl(`plugins/${release.name}/${release.latest}.json`)}>record</a>
+            {" · "}<span className="not-yet" title="pb_plugins does not exist yet">not installable yet</span>
+          </span>
         ) : (
-          <span className="not-yet" title="pb_plugins does not exist yet">Not installable yet</span>
+          <span className="not-yet" title="pb_plugins does not exist yet">Registered, no release yet</span>
         )}
       </footer>
       {audit && (

@@ -5,6 +5,7 @@
 // the pages.
 import plugins from "../../registry/plugins.json";
 import templates from "../../registry/templates.json";
+import index from "../../registry/v1/index.json";
 import type { Entry, Kind } from "./registry";
 
 export const LISTINGS: Record<Kind, Entry[]> = {
@@ -19,3 +20,8 @@ export const SUBMIT = {
   template: "https://github.com/voidbase-cloud/voidbase-marketplace/issues/new?template=submit-template.yml",
   plugin: "https://github.com/voidbase-cloud/voidbase-marketplace/issues/new?template=submit-plugin.yml",
 };
+
+/** what this marketplace serves for a listed plugin, by repository: the releases, as the registry protocol carries them */
+export interface Release { name: string; repository: string; latest: string; versions: { version: string; bytes: number; integrity: string; bundle: string; publishedOn: string }[] }
+export const RELEASES = new Map<string, Release>((index.plugins as Release[]).map((p) => [p.repository, p]));
+export const registryUrl = (path: string) => `/registry/v1/${path}`;

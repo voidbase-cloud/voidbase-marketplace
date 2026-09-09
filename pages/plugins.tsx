@@ -7,10 +7,13 @@ export default function Plugins() {
     <div className="listing">
       <h1>Plugins</h1>
       <p className="lead">
-        Nothing here can be installed. <code>pb_plugins</code> is on{" "}
-        <a href="https://voidbase.cloud/docs/roadmap" target="_blank" rel="noreferrer noopener">the roadmap</a> and has
-        no format yet, so these are registrations rather than releases: what people would write, recorded while the
-        loader is being designed, so it gets designed around them.
+        Each plugin listed here is built by this marketplace from its repository at a commit, audited before and after
+        the build, hashed, and served under <code>/registry/v1/</code> the way{" "}
+        <a href="https://github.com/voidbase-cloud/voidbase/blob/master/docs/registry.md" target="_blank" rel="noreferrer noopener">the registry protocol</a>{" "}
+        says, which any marketplace can serve and any instance can read. Nothing can install one yet:{" "}
+        <code>pb_plugins</code> is on{" "}
+        <a href="https://voidbase.cloud/docs/roadmap" target="_blank" rel="noreferrer noopener">the roadmap</a>, so a
+        release here is what an instance will install once it can, and a listing without one is a registration.
       </p>
       {entries.length ? (
         <div className="cards">{entries.map((e) => <Card key={e.repository} entry={e} kind="plugin" />)}</div>

@@ -1,0 +1,384 @@
+{
+  "schemaVersion": 1,
+  "marketplace": {
+    "name": "voidbase marketplace",
+    "url": "https://marketplace.voidbase.cloud"
+  },
+  "generatedOn": "2026-09-09",
+  "plugins": [
+    {
+      "name": "backups",
+      "repository": "voidbase-cloud/voidbase-plugin-backups",
+      "title": "Backups",
+      "summary": "PocketBase's backups API: create, list, download, upload and restore archives kept in the instance's own R2 bucket.",
+      "latest": "0.1.0",
+      "versions": [
+        {
+          "version": "0.1.0",
+          "manifest": {
+            "name": "backups",
+            "version": "0.1.0",
+            "tier": "official",
+            "voidbase": ">=0.9.0-beta.5"
+          },
+          "integrity": "sha256-dVhukbfbNxX5sz/86h9PWMfX0en5e6mqD36kT9WgfNU=",
+          "bundle": "plugins/backups/0.1.0/bundle.js",
+          "bytes": 412,
+          "source": {
+            "repository": "voidbase-cloud/voidbase-plugin-backups",
+            "commit": "8d25c084b7fdcc46b2b4c374355ca39ce286ec49"
+          },
+          "publishedOn": "2026-09-09",
+          "audit": {
+            "ranOn": "2026-09-09T01:01:37.001Z",
+            "checks": [
+              {
+                "name": "public repository",
+                "passed": true,
+                "detail": "reachable without signing in"
+              },
+              {
+                "name": "not archived",
+                "passed": true,
+                "detail": "actively owned"
+              },
+              {
+                "name": "has a licence",
+                "passed": true,
+                "detail": "MIT, from GitHub's own detection"
+              },
+              {
+                "name": "has a commit to build from",
+                "passed": true,
+                "detail": "8d25c084b7fd (master)"
+              },
+              {
+                "name": "has a plugin.json",
+                "passed": true,
+                "detail": "present"
+              },
+              {
+                "name": "the manifest is valid",
+                "passed": true,
+                "detail": "backups 0.1.0, tier official, voidbase >=0.9.0-beta.5"
+              },
+              {
+                "name": "names only interfaces voidbase defines",
+                "passed": true,
+                "detail": "none named"
+              },
+              {
+                "name": "has an entry point",
+                "passed": true,
+                "detail": "src/index.ts"
+              },
+              {
+                "name": "nothing obviously alarming in the source",
+                "passed": true,
+                "detail": "read 5 file(s)"
+              },
+              {
+                "name": "has a README",
+                "passed": true,
+                "detail": "present"
+              },
+              {
+                "name": "dependencies install without running scripts",
+                "passed": true,
+                "detail": "bun install --ignore-scripts"
+              },
+              {
+                "name": "bundles into one module",
+                "passed": true,
+                "detail": "1 output(s), target browser, format esm"
+              },
+              {
+                "name": "imports only what an instance provides",
+                "passed": true,
+                "detail": "@voidbase-cloud/voidbase/plugins/backups"
+              },
+              {
+                "name": "exports the plugin as its default export",
+                "passed": true,
+                "detail": "the loader takes the default export"
+              },
+              {
+                "name": "nothing obviously alarming in the bundle",
+                "passed": true,
+                "detail": "read the whole bundle"
+              },
+              {
+                "name": "is small enough to read",
+                "passed": true,
+                "detail": "412 bytes"
+              },
+              {
+                "name": "the manifest is the source's",
+                "passed": true,
+                "detail": "plugin.json at 8d25c084b7fd; an instance checks the loaded bundle says the same"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "hardening",
+      "repository": "voidbase-cloud/voidbase-plugin-hardening",
+      "title": "Hardening",
+      "summary": "PocketBase's rate limit rules and the 32 MB body limit, met by every request before a route. Provides hardening@1.",
+      "latest": "0.1.0",
+      "versions": [
+        {
+          "version": "0.1.0",
+          "manifest": {
+            "name": "hardening",
+            "version": "0.1.0",
+            "tier": "official",
+            "voidbase": ">=0.9.0-beta.5",
+            "provides": [
+              "hardening@1"
+            ]
+          },
+          "integrity": "sha256-kYlewauSyoAmz64iYIrWLMAW+hsGyLy9LzlFn7W4U9s=",
+          "bundle": "plugins/hardening/0.1.0/bundle.js",
+          "bytes": 424,
+          "source": {
+            "repository": "voidbase-cloud/voidbase-plugin-hardening",
+            "commit": "f96c57189e11f6c32903a4be5f5193e618558a72"
+          },
+          "publishedOn": "2026-09-09",
+          "audit": {
+            "ranOn": "2026-09-09T01:01:35.183Z",
+            "checks": [
+              {
+                "name": "public repository",
+                "passed": true,
+                "detail": "reachable without signing in"
+              },
+              {
+                "name": "not archived",
+                "passed": true,
+                "detail": "actively owned"
+              },
+              {
+                "name": "has a licence",
+                "passed": true,
+                "detail": "MIT, from GitHub's own detection"
+              },
+              {
+                "name": "has a commit to build from",
+                "passed": true,
+                "detail": "f96c57189e11 (master)"
+              },
+              {
+                "name": "has a plugin.json",
+                "passed": true,
+                "detail": "present"
+              },
+              {
+                "name": "the manifest is valid",
+                "passed": true,
+                "detail": "hardening 0.1.0, tier official, voidbase >=0.9.0-beta.5"
+              },
+              {
+                "name": "names only interfaces voidbase defines",
+                "passed": true,
+                "detail": "hardening@1"
+              },
+              {
+                "name": "has an entry point",
+                "passed": true,
+                "detail": "src/index.ts"
+              },
+              {
+                "name": "nothing obviously alarming in the source",
+                "passed": true,
+                "detail": "read 5 file(s)"
+              },
+              {
+                "name": "has a README",
+                "passed": true,
+                "detail": "present"
+              },
+              {
+                "name": "dependencies install without running scripts",
+                "passed": true,
+                "detail": "bun install --ignore-scripts"
+              },
+              {
+                "name": "bundles into one module",
+                "passed": true,
+                "detail": "1 output(s), target browser, format esm"
+              },
+              {
+                "name": "imports only what an instance provides",
+                "passed": true,
+                "detail": "@voidbase-cloud/voidbase/plugins/hardening"
+              },
+              {
+                "name": "exports the plugin as its default export",
+                "passed": true,
+                "detail": "the loader takes the default export"
+              },
+              {
+                "name": "nothing obviously alarming in the bundle",
+                "passed": true,
+                "detail": "read the whole bundle"
+              },
+              {
+                "name": "is small enough to read",
+                "passed": true,
+                "detail": "424 bytes"
+              },
+              {
+                "name": "the manifest is the source's",
+                "passed": true,
+                "detail": "plugin.json at f96c57189e11; an instance checks the loaded bundle says the same"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "realtime",
+      "repository": "voidbase-cloud/voidbase-plugin-realtime",
+      "title": "Realtime",
+      "summary": "Realtime subscriptions over SSE, fanned out by the instance's hub Durable Object, with presence. Provides realtime@1.",
+      "latest": "0.1.0",
+      "versions": [
+        {
+          "version": "0.1.0",
+          "manifest": {
+            "name": "realtime",
+            "version": "0.1.0",
+            "tier": "official",
+            "voidbase": ">=0.9.0-beta.5",
+            "provides": [
+              "realtime@1"
+            ]
+          },
+          "integrity": "sha256-uMfm/tE9xrDSXKxE2dNyz3/pA+AlpHleBkmzJKqRz3w=",
+          "bundle": "plugins/realtime/0.1.0/bundle.js",
+          "bytes": 418,
+          "source": {
+            "repository": "voidbase-cloud/voidbase-plugin-realtime",
+            "commit": "2f763f3e68a653561f66b7afd0a21b32ed3b4cdc"
+          },
+          "publishedOn": "2026-09-09",
+          "audit": {
+            "ranOn": "2026-09-09T01:01:38.585Z",
+            "checks": [
+              {
+                "name": "public repository",
+                "passed": true,
+                "detail": "reachable without signing in"
+              },
+              {
+                "name": "not archived",
+                "passed": true,
+                "detail": "actively owned"
+              },
+              {
+                "name": "has a licence",
+                "passed": true,
+                "detail": "MIT, from GitHub's own detection"
+              },
+              {
+                "name": "has a commit to build from",
+                "passed": true,
+                "detail": "2f763f3e68a6 (master)"
+              },
+              {
+                "name": "has a plugin.json",
+                "passed": true,
+                "detail": "present"
+              },
+              {
+                "name": "the manifest is valid",
+                "passed": true,
+                "detail": "realtime 0.1.0, tier official, voidbase >=0.9.0-beta.5"
+              },
+              {
+                "name": "names only interfaces voidbase defines",
+                "passed": true,
+                "detail": "realtime@1"
+              },
+              {
+                "name": "has an entry point",
+                "passed": true,
+                "detail": "src/index.ts"
+              },
+              {
+                "name": "nothing obviously alarming in the source",
+                "passed": true,
+                "detail": "read 5 file(s)"
+              },
+              {
+                "name": "has a README",
+                "passed": true,
+                "detail": "present"
+              },
+              {
+                "name": "dependencies install without running scripts",
+                "passed": true,
+                "detail": "bun install --ignore-scripts"
+              },
+              {
+                "name": "bundles into one module",
+                "passed": true,
+                "detail": "1 output(s), target browser, format esm"
+              },
+              {
+                "name": "imports only what an instance provides",
+                "passed": true,
+                "detail": "@voidbase-cloud/voidbase/plugins/realtime"
+              },
+              {
+                "name": "exports the plugin as its default export",
+                "passed": true,
+                "detail": "the loader takes the default export"
+              },
+              {
+                "name": "nothing obviously alarming in the bundle",
+                "passed": true,
+                "detail": "read the whole bundle"
+              },
+              {
+                "name": "is small enough to read",
+                "passed": true,
+                "detail": "418 bytes"
+              },
+              {
+                "name": "the manifest is the source's",
+                "passed": true,
+                "detail": "plugin.json at 2f763f3e68a6; an instance checks the loaded bundle says the same"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "repository": "voidbase-cloud/voidbase-demo",
+      "title": "The public demo",
+      "summary": "A voidbase project in PocketBase's own layout: hooks, a seeded schema and the admin panel, nothing else.",
+      "commit": "7d4a9597def6e6be396dfdc0fa8e87355a328d37"
+    },
+    {
+      "repository": "voidbase-cloud/voidbase-marketplace",
+      "title": "The marketplace itself",
+      "summary": "This marketplace: a stack app that prerenders its listing from a registry file, with submissions arriving as GitHub issues.",
+      "commit": "1ce673519dbf0245df74b0ad6b114988420d61d9"
+    },
+    {
+      "repository": "voidbase-cloud/voidbase-site",
+      "title": "The voidbase site",
+      "summary": "The site and documentation you are reading, as a voidbase stack app with pages, routes and an instance in one Worker.",
+      "commit": "75c5c14a7d5e2a5e05281b628fa281f3e7af808c"
+    }
+  ]
+}

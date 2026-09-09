@@ -4,7 +4,8 @@ Templates and plugins for [voidbase](https://voidbase.cloud), listed at
 [marketplace.voidbase.cloud](https://marketplace.voidbase.cloud).
 
 Your code stays in your repository. A listing points at it and records what our checks found on the day it was
-added. Nothing here is copied, vendored or republished.
+added. For a plugin the marketplace also builds a bundle from the repository at that commit, audits it on both sides
+of the build, hashes it and serves it, because that is the marketplace's job and not the contributor's.
 
 - **[Submit a template](https://github.com/voidbase-cloud/voidbase-marketplace/issues/new?template=submit-template.yml)**
 - **[Submit a plugin](https://github.com/voidbase-cloud/voidbase-marketplace/issues/new?template=submit-plugin.yml)**
@@ -17,12 +18,11 @@ This is early, and the useful thing to say about an early marketplace is what it
 **You can list a template, and you can start from one.** Starting is GitHub's own *Use this template* button, which
 clones the repository into your account. That is the entire install mechanism and it is somebody else's.
 
-**You cannot install a plugin yet.** voidbase has a manifest format and a loader: the three plugins it ships (backups,
-realtime and the request limits) arrive through them, and each is also a package under
-[voidbase-cloud](https://github.com/orgs/voidbase-cloud/repositories?q=voidbase-plugin) on GitHub Packages. But
-`pb_plugins` does not exist, so nothing listed here can be installed into an instance. Plugin submissions are open
-anyway, because installing is being designed now and what people actually want to build should shape it rather than
-the other way round. A plugin listing here is a registration, not a release.
+**You cannot install a plugin yet, but the release is real.** A listed plugin is built here from its repository at a
+commit, audited, hashed and served under `/registry/v1/` as [the registry protocol](https://github.com/voidbase-cloud/voidbase/blob/master/docs/registry.md)
+says. voidbase has the manifest format and the loader (the three plugins it ships arrive through them); what it does
+not have yet is `pb_plugins`, so nothing here can be installed into an instance. When it can, it installs what this
+marketplace serves, or what any other marketplace serving the same protocol does: an instance is not tied to this one.
 
 **There are no accounts, downloads or rankings.** Nothing to sign in to and nothing counted. If creators are ever
 able to charge for what they publish, it will be written down on
@@ -30,16 +30,37 @@ able to charge for what they publish, it will be written down on
 
 ## The registry is a file
 
-`registry/templates.json` and `registry/plugins.json` are the whole database. A listing arrives as a commit, which
+`registry/templates.json` and `registry/plugins.json` are the listings, and `registry/v1/` is what is served: the index,
+one record per plugin version, and the bundle beside it, all written by the pipeline and committed. Together they are
+the whole database. A listing arrives as a commit, which
 means it can be read, reviewed, reverted and argued with, and the site is prerendered from those files at build
 time.
+
+## The registry protocol
+
+Three GETs, defined in voidbase ([docs/registry.md](https://github.com/voidbase-cloud/voidbase/blob/master/docs/registry.md))
+because voidbase is the consumer and the spec is what keeps this marketplace unprivileged:
+
+| | |
+| --- | --- |
+| `GET /registry/v1/index.json` | everything served: plugins with every version, and templates |
+| `GET /registry/v1/plugins/<name>/<version>.json` | one version: manifest, integrity, source commit, audit |
+| `GET /registry/v1/plugins/<name>/<version>/bundle.js` | the bundle, one ES module whose default export is the plugin |
+
+The pipeline is `bun scripts/bundle.ts <owner/name> [ref]`: audit the source (public, licence, `plugin.json` valid
+against voidbase's `checkManifest`, interfaces voidbase defines, an entry point, nothing alarming), install its
+dependencies without running their scripts, bundle with Bun (what an instance provides stays an import: voidbase's
+entry points and hono; everything else is inlined), audit the bundle (imports only what an instance provides, a
+default export, size, nothing alarming), hash it, write the record and regenerate the index. A version is immutable;
+a change is a new version. It runs on approval and from the `bundle` workflow by hand.
 
 ## Working on it
 
 ```bash
 bun install
 bun run dev              # the site
-bun run registry:check   # the registry parses and every entry is valid
+bun run registry:check   # the listings are valid, the index is fresh and readable by an instance, every bundle matches its record
+bun run plugin:bundle <owner/name> [ref]   # build, audit and publish a plugin version (needs GH_TOKEN)
 bun run check            # typecheck
 bun run build            # production build, prerendered into .voidbase/pb_public
 ```

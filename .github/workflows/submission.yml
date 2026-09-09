@@ -60,6 +60,11 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bun scripts/approve.ts
+      - name: Build, audit and publish the plugin's bundle
+        if: contains(github.event.issue.labels.*.name, 'plugin')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bun scripts/bundle.ts --from-issue
       - name: Commit the listing
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

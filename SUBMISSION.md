@@ -16,12 +16,18 @@ and decides. Nothing is listed automatically and nothing is rejected automatical
 
 ## A plugin
 
-Read this before spending time on it: voidbase has a plugin format and a loader, but nothing can be installed into an
-instance yet, and a listing does not make a plugin work with voidbase.
+A plugin is a repository with a `plugin.json` in its root (the manifest voidbase's loader reads: name, version, tier,
+the voidbase range, the interfaces it provides and requires) and an entry point (`exports["."]` in package.json, or
+`src/index.ts`) whose default export is the plugin. You do not build or publish anything. Read this before spending
+time on it: voidbase has the format and the loader, but nothing can be installed into an instance yet, and a
+listing does not make a plugin work with voidbase until it can.
 
-The [plugin form](https://github.com/voidbase-cloud/voidbase-marketplace/issues/new?template=submit-plugin.yml) asks
-what your plugin would need from voidbase. That answer is the useful part, because installing is being designed now
-and the answers are what it should be designed around.
+1. Make the repository public, give it a licence GitHub can identify, and write a README.
+2. Open the [plugin submission form](https://github.com/voidbase-cloud/voidbase-marketplace/issues/new?template=submit-plugin.yml).
+3. A maintainer labels it `approved`, which lists it in `registry/plugins.json` and runs the pipeline: the repository
+   at its current commit is audited, bundled, audited again, hashed and written under `registry/v1/`, and served
+   from `/registry/v1/`. What every check found is recorded with the version, so you can read it and disagree.
+4. A new version is a new commit and a run of the `bundle` workflow against it; a published version never changes.
 
 ## What the audit checks
 

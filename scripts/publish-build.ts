@@ -45,14 +45,16 @@ for (;;) {
       console.log(r.out.trim().split("\n").slice(-3).join("\n"));
     } else {
       const r = quiet(["bun", "scripts/bundle.ts", job.repository, ...(job.ref ? [job.ref] : [])]);
-      if (r.code !== 0) { await fail(r.out.slice(-1500)); continue; }
-      console.log(r.out.trim().split("\n").slice(-3).join("\n"));
+      // a version this marketplace already serves is nothing to do, not a failure (a daily check or a hand can ask twice)
+      const served = /is already published/.test(r.out);
+      if (r.code !== 0 && !served) { await fail(r.out.slice(-1500)); continue; }
+      console.log(served ? `already served: ${r.out.match(/(\S+ \d+\.\d+\.\d+\S*) is already published/)?.[1] ?? "this version"}` : r.out.trim().split("\n").slice(-3).join("\n"));
       const check = quiet(["bun", "scripts/registry.ts", "check"]); if (check.code !== 0) { await fail(`the registry check refused the result:\n${check.out.slice(-1500)}`); continue; }
       const changed = quiet(["git", "status", "--porcelain", "--", "registry"]).out.trim();
       if (changed) { must(["git", "add", "registry"]); must(["git", "commit", "-q", "-m", `feat(registry): ${job.repository} at ${job.ref || "its default branch"}`]); must(["git", "push", "-q", "origin", "HEAD:master"]); }
       else console.log("already served: nothing to commit");
     }
-    const version = quiet(["git", "log", "-1", "--format=%s"]).out.match(/\d+\.\d+\.\d+\S*/)?.[0];
+    const version = (job.ref.match(/\d+\.\d+\.\d+\S*/) ?? quiet(["git", "log", "-1", "--format=%s"]).out.match(/\d+\.\d+\.\d+\S*/))?.[0];
     const commit = quiet(["git", "rev-parse", "HEAD"]).out.trim();
     await api("POST", `/api/marketplace/publish/${job.id}/done`, { version, commit }, SU);
     done++; console.log(`${label}: done (${commit.slice(0, 7)})`);

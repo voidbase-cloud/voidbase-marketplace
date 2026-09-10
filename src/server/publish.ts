@@ -34,9 +34,12 @@ export async function queuePublish(c: Ctx, input: PublishInput): Promise<{ row: 
   await pb.$app.save(row);
   const runs = runsOf(c);
   if (runs) {
+    // the run's id is on the row before the run exists: a step may read the row at once, and a save from a stale
+    // copy would write the id away
     const id = `${row.id}-${Date.now().toString(36)}`;
-    try { await runs.create({ id, params: { publishId: row.id } }); row.set("run", id); await pb.$app.save(row); return { row, started: "workflow", duplicate: false }; }
-    catch (err) { console.warn("marketplace: publish run", err instanceof Error ? err.message : err); }
+    row.set("run", id); await pb.$app.save(row);
+    try { await runs.create({ id, params: { publishId: row.id } }); return { row, started: "workflow", duplicate: false }; }
+    catch (err) { console.warn("marketplace: publish run", err instanceof Error ? err.message : err); row.set("run", ""); await pb.$app.save(row); }
   }
   const s = await startPublisher(input.reason); if (s.build) { row.set("build", s.build); await pb.$app.save(row); }
   return { row, started: s.status, duplicate: false };

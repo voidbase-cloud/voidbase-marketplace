@@ -19,7 +19,6 @@ export default class Publish extends WorkflowEntrypoint<Record<string, unknown>,
       const started = (await step.do(`start the publish build (${attempt})`, { retries: { limit: 5, delay: "30 seconds", backoff: "exponential" } }, () =>
         app(async (): Promise<BuildStart> => { const r = await startPublisher(`publish ${publishId}`); if (r.status === "failed") throw new Error("the publish build could not be started"); return r; }))) as BuildStart;
       if (started.status === "no-token") { report = { error: "no build was started: the marketplace has no MP_BUILDS_TOKEN to start the publish build with" }; break; }
-      if (started.build) await step.do(`record the build (${attempt})`, () => app(async () => { const row = await pb.$app.findRecordById("mp_publishes", publishId); if (row) { row.set("build", started.build); await pb.$app.save(row); } }));
       let dead = "";
       for (let round = 1; round <= ROUNDS && !report && !dead; round++) {
         try { report = (await step.waitForEvent<PublishReport>(`the build reports (${attempt}.${round})`, { type: "published", timeout: ROUND })).payload; }

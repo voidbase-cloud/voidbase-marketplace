@@ -1,0 +1,18 @@
+{
+  "//": "workflows/ run on Workers, not Bun: typed against the Workers types alone (cloudflare:workers), like voidbase-site does",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "@cloudflare/workers-types"
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  },
+  "include": [
+    "workflows",
+    "src/server"
+  ]
+}

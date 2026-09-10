@@ -5,14 +5,15 @@
   "scripts": {
     "dev": "vp dev",
     "build": "bunx --bun vite build",
-    "check": "bunx tsc --noEmit -p tsconfig.json",
+    "check": "bunx tsc --noEmit -p tsconfig.json && bunx tsc --noEmit -p tsconfig.workflows.json",
     "preview": "bun .voidbase/main.ts --http 127.0.0.1:8090",
     "registry:check": "bun scripts/registry.ts check",
     "submission:validate": "bun scripts/validate.ts",
     "submission:approve": "bun scripts/approve.ts",
     "deploy": "bunx voidbase sync --name voidbase-marketplace --domain marketplace.voidbase.cloud",
     "registry:index": "bun scripts/registry-index.ts",
-    "plugin:bundle": "bun scripts/bundle.ts"
+    "plugin:bundle": "bun scripts/bundle.ts",
+    "test": "bun test/publish.ts"
   },
   "dependencies": {
     "@void/react": "^0.10.13",
@@ -21,6 +22,7 @@
     "react-dom": "^19.2.8"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260910.1",
     "@types/bun": "^1.4.1",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",

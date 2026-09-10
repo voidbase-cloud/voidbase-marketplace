@@ -67,9 +67,20 @@ bun run check            # typecheck
 bun run build            # production build, prerendered into .voidbase/pb_public
 ```
 
-Submissions are GitHub issues, and a maintainer handles them from a machine with `gh` signed in:
-`bun run submission:validate -- --issue <n> --post` audits one and comments, `bun run submission:approve -- --issue <n>`
-lists it (and builds a plugin), commits, pushes, answers and closes it. The push builds and deploys the site.
+Submissions are GitHub issues, and the marketplace handles them itself. The repository's webhook sends `issues`
+events to `/api/marketplace/github/webhook`: a submission opened or edited is audited and answered with a comment;
+one a maintainer labels `approved` is listed (a plugin is built, audited and hashed), committed, pushed, answered and
+closed. The daily check (`crons/refresh.ts`, 06:00 UTC) asks every listed plugin's repository for its tags and
+publishes the versions this marketplace does not serve yet. Each of those is a row of `mp_publishes`, a Cloudflare
+Workflow (`workflows/publish.ts`) starts the `voidbase-marketplace (publish)` build through the Builds API and
+watches it, and that build (`scripts/publish-build.ts`) claims the rows, runs the same scripts a maintainer would,
+commits and pushes; the push deploys. Two Flagship flags hold the pipeline without a deploy: `MARKETPLACE_SUBMISSIONS`
+(the webhook queues nothing while off) and `MARKETPLACE_AUTO_VERSIONS` (the daily check publishes nothing while off).
+A superuser can queue by hand, `POST /api/marketplace/publish` with `{ issue }` or `{ repository, ref }`, and read
+the queue at `GET /api/marketplace/publish`; `bun test` (`test/publish.ts`) is the pipeline against mocks.
+
+By hand, from a machine with `gh` signed in, the scripts still work: `bun run submission:validate -- --issue <n>
+--post`, `bun run submission:approve -- --issue <n>`, `bun run plugin:bundle <owner/name> [ref]`.
 
 It is a [voidbase stack app](https://voidbase.cloud/docs/run/stack): pages, the API and the instance build into one
 Worker. The instance holds nothing yet, because the registry is in git; it is here for what comes after listing.
@@ -88,7 +99,11 @@ trigger, under **Settings > Build > Variables and secrets**, because neither can
 | `VOIDBASE_DEPLOY_CF_API_KEY` | secret | The deploy token. `voidbase token` prints the dashboard link that creates one with the right permissions. |
 
 Everything else the deploy needs is declared in `vb_secrets/main.ts` with defaults, including the Worker name and
-`marketplace.voidbase.cloud`.
+`marketplace.voidbase.cloud`. The secrets (the superuser, `MP_GH_TOKEN`, `MP_BUILDS_TOKEN`, `MP_WEBHOOK_SECRET`) live
+in the account's Secrets Store (`VOIDBASE_SECRETS_STORE` on the trigger; `voidbase secrets push --dir vb_secrets`
+from a checkout that has `vb_secrets/secrets.json`). The `(publish)` trigger is the Worker's second, never on push,
+with `BUN_VERSION`, `MP_URL`, `MARKETPLACE_REPO`, `MP_BUILD_EMAIL`/`MP_BUILD_PASSWORD` (the superuser) and `GH_TOKEN`
+(commits, issue comments) on it.
 
 ## Credit
 

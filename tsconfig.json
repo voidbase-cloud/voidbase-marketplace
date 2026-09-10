@@ -14,5 +14,5 @@
     "types": ["void/env", "vite/client", "bun"],
     "paths": { "@/*": ["./src/*"] }
   },
-  "include": ["src", "pages", "routes", "scripts", "vb_hooks"]
+  "include": ["src", "pages", "routes", "scripts", "vb_hooks", "crons", "test"]
 }

@@ -7,9 +7,9 @@
 // It never approves anything. Its whole job is to make the decision cheap for the person who does.
 import { problemsWith, readRegistry, type Kind } from "../src/lib/registry";
 import { auditTemplate, renderReport } from "./audit";
-import { kindOf, must, parseSubmission, readIssue, REPO, toEntry } from "./submission";
+import { commentOnIssue, kindOf, parseSubmission, readIssue, toEntry } from "./submission";
 
-const issue = readIssue();
+const issue = await readIssue();
 
 const kind: Kind | null = kindOf(issue.labels.map((l) => l.name), issue.title);
 if (!kind) { console.log("not a submission issue; nothing to do"); process.exit(0); }
@@ -42,8 +42,7 @@ if (problems.length) {
 const comment = lines.join("\n");
 console.log(comment);
 if (process.argv.includes("--post")) {
-  await Bun.write("comment.md", `${comment}\n`);
-  must(["gh", "issue", "comment", String(issue.number), "--repo", REPO, "--body-file", "comment.md"]);
+  await commentOnIssue(issue.number, comment);
   console.log(`\nposted on #${issue.number}`);
 }
 process.exit(0);

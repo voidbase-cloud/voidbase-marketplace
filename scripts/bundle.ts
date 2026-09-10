@@ -151,7 +151,7 @@ if (import.meta.main) {
   const force = args.includes("--force");
   let repository: string | undefined; let ref: string | undefined;
   if (args.includes("--issue")) {
-    const issue = readIssue(args);
+    const issue = await readIssue(args);
     if (kindOf(issue.labels.map((l) => l.name), issue.title) !== "plugin") { console.log("not a plugin submission; nothing to bundle"); process.exit(0); }
     repository = parseSubmission(issue.body, "plugin").repository ?? undefined;
   } else {

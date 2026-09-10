@@ -9,14 +9,29 @@ export const REPO = process.env.MARKETPLACE_REPO ?? "voidbase-cloud/voidbase-mar
 export interface Issue { number: number; title: string; body: string; user: { login: string }; labels: { name: string }[] }
 
 /** the submission issue named by --issue <number>, read with gh (signed in with access to the repository) */
-export function readIssue(args = process.argv.slice(2)): Issue {
+const GH_API = (process.env.GITHUB_API_URL || "https://api.github.com").replace(/\/$/, "");
+const ghToken = () => process.env.GH_TOKEN || process.env.GITHUB_TOKEN || "";
+/** GitHub's REST API with GH_TOKEN (a build), else `gh` (a maintainer's machine) */
+export async function ghApi(method: string, path: string, body?: unknown): Promise<unknown> {
+  if (ghToken()) {
+    const r = await fetch(`${GH_API}${path}`, { method, headers: { authorization: `Bearer ${ghToken()}`, accept: "application/vnd.github+json", "x-github-api-version": "2022-11-28", "user-agent": "voidbase-marketplace", ...(body !== undefined ? { "content-type": "application/json" } : {}) }, body: body === undefined ? undefined : JSON.stringify(body) });
+    const text = await r.text(); if (!r.ok) throw new Error(`GitHub ${method} ${path}: ${r.status} ${text.slice(0, 200)}`);
+    return text ? JSON.parse(text) : null;
+  }
+  const args = ["gh", "api", "-X", method, path]; if (body !== undefined) args.push("--input", "-");
+  const p = Bun.spawnSync(args, { stdout: "pipe", stderr: "pipe", stdin: body !== undefined ? new TextEncoder().encode(JSON.stringify(body)) : undefined });
+  if (p.exitCode !== 0) throw new Error(`gh api ${path}: ${p.stderr.toString().trim()}`);
+  const out = p.stdout.toString(); return out ? JSON.parse(out) : null;
+}
+export async function readIssue(args = process.argv.slice(2)): Promise<Issue> {
   const i = args.indexOf("--issue"); const n = Number(args[i + 1]);
   if (i < 0 || !Number.isInteger(n) || n <= 0) { console.error("say which issue: --issue <number>"); process.exit(2); }
-  const p = Bun.spawnSync(["gh", "api", `repos/${REPO}/issues/${n}`], { stdout: "pipe", stderr: "pipe" });
-  if (p.exitCode !== 0) { console.error(`gh api repos/${REPO}/issues/${n}: ${p.stderr.toString().trim()}`); process.exit(2); }
-  const j = JSON.parse(p.stdout.toString()) as { number: number; title: string; body: string | null; user: { login: string }; labels: { name: string }[] };
+  let j: { number: number; title: string; body: string | null; user: { login: string }; labels: { name: string }[] };
+  try { j = (await ghApi("GET", `/repos/${REPO}/issues/${n}`)) as typeof j; } catch (e) { console.error(e instanceof Error ? e.message : String(e)); process.exit(2); }
   return { number: j.number, title: j.title, body: j.body ?? "", user: j.user, labels: j.labels };
 }
+export const commentOnIssue = (n: number, body: string) => ghApi("POST", `/repos/${REPO}/issues/${n}/comments`, { body });
+export const closeIssue = (n: number) => ghApi("PATCH", `/repos/${REPO}/issues/${n}`, { state: "closed", state_reason: "completed" });
 
 /** a gh or git command that has to succeed, its output shown */
 export function must(cmd: string[]): void {

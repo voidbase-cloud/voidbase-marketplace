@@ -9,9 +9,9 @@
 // submission and the decision and the recorded commit has to be the one that was actually looked at.
 import { CATEGORIES, problemsWith, type Entry, type Kind, type Registry } from "../src/lib/registry";
 import { auditTemplate } from "./audit";
-import { kindOf, must, parseSubmission, readIssue, REPO, toEntry } from "./submission";
+import { closeIssue, commentOnIssue, kindOf, must, parseSubmission, readIssue, toEntry } from "./submission";
 
-const issue = readIssue();
+const issue = await readIssue();
 
 const kind: Kind | null = kindOf(issue.labels.map((l) => l.name), issue.title);
 if (!kind) { console.error("this issue is not a template or plugin submission"); process.exit(1); }
@@ -43,7 +43,7 @@ must(["bun", "scripts/registry.ts", "check"]);
 must(["git", "add", "registry"]);
 must(["git", "commit", "-m", `feat(registry): list ${entry.repository} from #${issue.number}`]);
 if (process.argv.includes("--no-push")) { console.log("committed, not pushed (--no-push)"); process.exit(0); }
-must(["git", "push"]);
-must(["gh", "issue", "comment", String(issue.number), "--repo", REPO, "--body", "Listed. It appears on https://marketplace.voidbase.cloud when the deploy finishes."]);
-must(["gh", "issue", "close", String(issue.number), "--repo", REPO, "--reason", "completed"]);
+must(["git", "push", "-q", "origin", "HEAD:master"]);
+await commentOnIssue(issue.number, "Listed. It appears on https://marketplace.voidbase.cloud when the deploy finishes.");
+await closeIssue(issue.number);
 console.log(`pushed; #${issue.number} answered and closed`);

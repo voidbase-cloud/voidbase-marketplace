@@ -14,6 +14,8 @@ export default class Publish extends WorkflowEntrypoint<Record<string, unknown>,
   async run(event: WorkflowEvent<PublishParams>, step: WorkflowStep): Promise<PublishReport> {
     const { publishId } = event.payload;
     const app = <T>(fn: () => Promise<T>) => withApp(this.env as never, fn);
+    // diagnostic (temporary): what this step can see
+    await step.do("diagnose", async () => { const g = (globalThis as Record<string, unknown>).__voidbaseHooks; const e = this.env as Record<string, unknown>; return { hooks: !!g, hookKeys: g ? Object.keys(g as object).length : 0, envKeys: Object.keys(e).length, token: typeof e.MP_BUILDS_TOKEN, tokenKeys: e.MP_BUILDS_TOKEN && typeof e.MP_BUILDS_TOKEN === "object" ? Object.getOwnPropertyNames(Object.getPrototypeOf(e.MP_BUILDS_TOKEN)) : null, worker: String(e.VOIDBASE_WORKER_NAME ?? "") }; });
     let report: PublishReport | undefined;
     for (let attempt = 1; attempt <= ATTEMPTS && !report; attempt++) {
       const started = (await step.do(`start the publish build (${attempt})`, { retries: { limit: 5, delay: "30 seconds", backoff: "exponential" } }, () =>

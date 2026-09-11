@@ -13,6 +13,7 @@
     "deploy": "bunx voidbase sync --name voidbase-marketplace --domain marketplace.voidbase.cloud",
     "registry:index": "bun scripts/registry-index.ts",
     "plugin:bundle": "bun scripts/bundle.ts",
+    "theme:publish": "bun scripts/theme.ts",
     "test": "bun test/publish.ts"
   },
   "dependencies": {

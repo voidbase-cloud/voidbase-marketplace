@@ -1,5 +1,7 @@
-// The daily version check: every listed plugin's repository is asked for its tags, and a tag this marketplace does
-// not serve yet is queued for publishing. New versions flow without anybody running the pipeline by hand;
+// The daily version check: every listed plugin's and theme's repository is asked for its tags, and a tag this
+// marketplace does not serve yet is queued for publishing. A theme is checked exactly as a plugin is, because a
+// version is a tag either way; what differs is the pipeline the publish build then runs, and it works that out from
+// the listing. New versions flow without anybody running the pipeline by hand;
 // MARKETPLACE_AUTO_VERSIONS off (Flagship) turns the check into a no-op. Nothing here throws: a tick that fails logs why.
 import { defineScheduled } from "void";
 import { pb } from "@voidbase-cloud/voidbase/adapter";
@@ -20,11 +22,13 @@ async function missing(repository: string, served: Set<string>): Promise<string[
 
 export default defineScheduled(async () => {
   if (!on("MARKETPLACE_AUTO_VERSIONS", true)) { console.log("refresh: MARKETPLACE_AUTO_VERSIONS is off; nothing checked"); return; }
-  let index: { plugins: { name: string; repository: string; versions: { version: string }[] }[] };
+  type Listing = { name: string; repository: string; versions: { version: string }[] };
+  let index: { plugins: Listing[]; themes?: Listing[] };
   try { index = (await (await fetch(`${env("MP_URL", "https://marketplace.voidbase.cloud")}/registry/v1/index.json`, { headers: { "user-agent": "voidbase-marketplace" } })).json()) as typeof index; }
   catch (err) { console.warn("refresh: the index could not be read", err instanceof Error ? err.message : err); return; }
   let queued = 0;
-  for (const p of index.plugins) {
+  const listings = [...index.plugins, ...(index.themes ?? [])];
+  for (const p of listings) {
     try {
       const served = new Set(p.versions.map((v) => v.version));
       for (const tag of await missing(p.repository, served)) {
@@ -36,5 +40,5 @@ export default defineScheduled(async () => {
       }
     } catch (err) { console.warn("refresh:", p.name, err instanceof Error ? err.message : err); }
   }
-  console.log(`refresh: ${index.plugins.length} plugin(s) checked, ${queued} version(s) queued`);
+  console.log(`refresh: ${index.plugins.length} plugin(s) and ${index.themes?.length ?? 0} theme(s) checked, ${queued} version(s) queued`);
 });

@@ -7,6 +7,7 @@
   "generatedOn": "2026-09-09",
   "plugins": [
     {
+      "kind": "plugin",
       "name": "auth",
       "repository": "voidbase-cloud/voidbase-plugin-auth",
       "title": "Auth",
@@ -133,6 +134,7 @@
       ]
     },
     {
+      "kind": "plugin",
       "name": "backups",
       "repository": "voidbase-cloud/voidbase-plugin-backups",
       "title": "Backups",
@@ -249,6 +251,7 @@
       ]
     },
     {
+      "kind": "plugin",
       "name": "hardening",
       "repository": "voidbase-cloud/voidbase-plugin-hardening",
       "title": "Hardening",
@@ -368,6 +371,7 @@
       ]
     },
     {
+      "kind": "plugin",
       "name": "realtime",
       "repository": "voidbase-cloud/voidbase-plugin-realtime",
       "title": "Realtime",
@@ -489,22 +493,26 @@
   ],
   "templates": [
     {
+      "kind": "template",
       "repository": "voidbase-cloud/voidbase-demo",
       "title": "The public demo",
       "summary": "A voidbase project in PocketBase's own layout: hooks, a seeded schema and the admin panel, nothing else.",
       "commit": "7d4a9597def6e6be396dfdc0fa8e87355a328d37"
     },
     {
+      "kind": "template",
       "repository": "voidbase-cloud/voidbase-marketplace",
       "title": "The marketplace itself",
       "summary": "This marketplace: a stack app that prerenders its listing from a registry file, with submissions arriving as GitHub issues.",
       "commit": "1ce673519dbf0245df74b0ad6b114988420d61d9"
     },
     {
+      "kind": "template",
       "repository": "voidbase-cloud/voidbase-site",
       "title": "The voidbase site",
       "summary": "The site and documentation you are reading, as a voidbase stack app with pages, routes and an instance in one Worker.",
       "commit": "75c5c14a7d5e2a5e05281b628fa281f3e7af808c"
     }
-  ]
+  ],
+  "themes": []
 }

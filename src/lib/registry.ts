@@ -1,10 +1,10 @@
 // What a listing is, and the rules a submission has to pass before it becomes one.
 //
-// The registry is two JSON files in this repository rather than rows in a database, for the same reason the rest of
+// The registry is three JSON files in this repository rather than rows in a database, for the same reason the rest of
 // voidbase keeps configuration in git: a listing is a claim about somebody else's code, and a claim like that should
 // arrive as a reviewable diff with a name on it. The site reads these files at build time.
 
-export type Kind = "template" | "plugin";
+export type Kind = "template" | "plugin" | "theme";
 
 export interface Entry {
   /** owner/name on GitHub, lower case, which is also the listing's identity */
@@ -41,6 +41,7 @@ export interface Registry {
 export const CATEGORIES: Record<Kind, string[]> = {
   template: ["Starter", "Site", "Application", "Integration", "Example"],
   plugin: ["Auth", "Content", "Media", "Operations", "Payments", "Search", "Other"],
+  theme: ["Panel", "Site", "Docs", "Minimal", "Other"],
 };
 
 export const MAX_TAGS = 3;
@@ -76,5 +77,6 @@ export function problemsWith(entry: Partial<Entry>, kind: Kind, existing: Entry[
   return out;
 }
 
+/** registry/templates.json, registry/plugins.json, registry/themes.json */
 export const readRegistry = async (kind: Kind): Promise<Registry> =>
   JSON.parse(await Bun.file(new URL(`../../registry/${kind}s.json`, import.meta.url)).text()) as Registry;

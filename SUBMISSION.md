@@ -32,6 +32,43 @@ later) into an executable, a local instance, a project or a stack app, and from 
 4. A new version is a new commit of your repository and a maintainer's `bun run plugin:bundle <owner/name> [ref]`
    against it, pushed; a published version never changes. Open an issue to ask for one.
 
+## A theme
+
+A theme is a repository with a `theme.json` in its root, a `pb_public` overlay (files copied over an instance's
+static files) and the SCSS or CSS a stack app imports. Read this before spending time on it: **a theme is copied, not
+installed.** `voidbase plugins add` installs plugins, there is no `voidbase themes add` in the package, and this
+marketplace will not pretend there is. What a listing gets you is the audit, a version that never changes, every file
+served with its own hash, and a line on the listing saying what to copy where.
+
+```json
+{
+  "name": "midnight",
+  "title": "Midnight",
+  "summary": "A dark theme for the panel and for a stack app's pages.",
+  "version": "1.0.0",
+  "licence": "MIT",
+  "author": "you",
+  "homepage": "https://example.com/midnight",
+  "carries": { "public": "pb_public", "styles": ["styles/midnight.scss"] }
+}
+```
+
+`name` is lowercase letters, digits and dashes, and is what the theme is served under. `version` is `1.2.3` (or
+`1.2.3-beta.1`), and a published version never changes: a change is a new version. `carries.public` is the directory
+copied over an instance's `pb_public`, and it defaults to `pb_public`; `carries.styles` are the stylesheets a stack
+app imports, which is where your variables live. Nothing outside those paths is published, and `licence` may be
+spelled `license` if you must.
+
+1. Make the repository public, give it a licence GitHub can identify, and write a README.
+2. Open the [theme submission form](https://github.com/voidbase-cloud/voidbase-marketplace/issues/new?template=submit-theme.yml).
+3. The audit runs on the issue and comments with what it found: the repository, the manifest, and whether the paths
+   it declares are there. Fix anything it flags by editing the issue, which runs it again.
+4. A maintainer approves it (`bun run submission:approve -- --issue <n>`), which lists it in `registry/themes.json`
+   and runs the pipeline: the files themselves are audited, each one is hashed, they are copied under
+   `registry/v1/themes/<name>/<version>/`, and what every check found is recorded with the version.
+5. A new version is a new tag on your repository. The daily check finds it and publishes it; a maintainer can also
+   run `bun run theme:publish <owner/name> [ref]` by hand.
+
 ## What the audit checks
 
 All of it is deterministic, all of it is reported with the reason, and all of it is visible on the listing so you can
@@ -46,6 +83,18 @@ disagree with any single check by reading it.
 | looks like a voidbase project | One of `void.json`, `vb_hooks`, `vb_migrations`, `pb_hooks`, `pb_migrations`, `vb_secrets` or `pb_secrets` is in the root. **Blocking.** |
 | has a README | There is something to read before cloning it. |
 | nothing obviously alarming | The files we read contain no shell-piped downloads, `eval`, process spawning or anything shaped like a credential. |
+
+A theme is a different kind of repository, so it is checked against what a theme is. The first pass on the issue
+reads the repository (public, not archived, a licence, a commit, a `theme.json` that is valid, and the paths it
+declares present in the root). The rest runs when the version is published, over the whole checkout, and all of it is
+blocking, because the files are what is served:
+
+| Check | What it means |
+| --- | --- |
+| carries what it declares, and only that | Every path in `carries` is there, nothing published is outside them, and nothing is a symbolic link. |
+| no JavaScript in what it carries | No script file, no `<script>` tag, no inline event handler. An overlay is copied over an instance's static files: if it ships code it is a plugin, and plugins are audited as plugins. |
+| only the kinds of file a theme is made of | Stylesheets, pages, images and fonts (`css`, `scss`, `sass`, `html`, `svg`, `json`, `md`, `txt`, and the usual image and font extensions). |
+| is small enough to serve from a repository | 512 KB in one file, 2 MB in total. The registry is a git repository somebody has to review. |
 
 Blocking means it cannot be listed as it stands. The rest is for a maintainer to weigh, which is why a missing
 licence is reported rather than fatal: an unlicensed repository is a real problem, and whether it is *your* problem
@@ -64,4 +113,5 @@ on a model's opinion without a reason they can read is worse than one with no ch
 ## Removal
 
 A listing can be removed if the repository disappears, becomes something other than what was listed, or turns out to
-be someone else's work. Open an issue.
+be someone else's work. Open an issue. Instances that installed a removed plugin keep what they have, and a project
+that copied a removed theme keeps those files; neither can be fetched from here again.

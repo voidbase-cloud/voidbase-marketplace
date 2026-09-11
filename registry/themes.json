@@ -1,0 +1,5 @@
+{
+  "$comment": "Accepted themes: the listings. What is served for each (the version records and the files themselves) is under registry/v1/themes. There is no voidbase themes add yet, so a theme is listed, served and copied: the record says which files it carries and what each one hashes to.",
+  "schemaVersion": 1,
+  "entries": []
+}

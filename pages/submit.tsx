@@ -41,6 +41,22 @@ export default function Submit() {
       </section>
 
       <section>
+        <h2>A theme</h2>
+        <p>
+          A public repository with a <code>theme.json</code> in its root, a <code>pb_public</code> overlay and the
+          SCSS or CSS a stack app imports. The audit is about what the files are: no JavaScript in the overlay,
+          nothing outside the directories <code>carries</code> declares, stylesheets, pages, images and fonts only,
+          512 KB a file and 2 MB in total. Every file of a published version is hashed and served.
+        </p>
+        <p>
+          A theme is copied rather than installed. <code>voidbase plugins add</code> installs plugins, and there is no{" "}
+          <code>voidbase themes add</code> yet, so what you get is the files, their hashes and a command that fetches
+          them. <a href={SUBMIT.theme} target="_blank" rel="noreferrer noopener">The theme submission form</a> says
+          the rest.
+        </p>
+      </section>
+
+      <section>
         <h2>What we check, and what we do not</h2>
         <p>
           The checks are deterministic and they are listed in the audit report on every card, so you can disagree

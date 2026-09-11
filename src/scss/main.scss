@@ -170,6 +170,18 @@ main { max-width: 900px; margin: 0 auto; padding: 32px 20px 64px; }
     .fineprint { color: var(--dim); font-size: 13px; margin: 12px 0 0; }
 }
 
+.copy-theme {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--panel);
+    padding: 12px 14px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--hint);
+    max-width: 68ch;
+}
+
 .empty {
     border: 1px dashed var(--line);
     border-radius: var(--radius);

@@ -6,7 +6,7 @@
 //
 // It never approves anything. Its whole job is to make the decision cheap for the person who does.
 import { problemsWith, readRegistry, type Kind } from "../src/lib/registry";
-import { auditTemplate, renderReport } from "./audit";
+import { auditTemplate, auditTheme, renderReport } from "./audit";
 import { commentOnIssue, kindOf, parseSubmission, readIssue, toEntry } from "./submission";
 
 const issue = await readIssue();
@@ -29,7 +29,8 @@ const entry = toEntry(parsed, { submittedBy: issue.user.login, issue: issue.numb
 const problems = problemsWith(entry, kind, registry.entries);
 
 const lines: string[] = [];
-lines.push(`**${kind === "template" ? "Template" : "Plugin"} submission for \`${parsed.repository ?? "(unreadable)"}\`**`, "");
+const KIND = { template: "Template", plugin: "Plugin", theme: "Theme" };
+lines.push(`**${KIND[kind]} submission for \`${parsed.repository ?? "(unreadable)"}\`**`, "");
 
 if (problems.length) {
   lines.push("The form needs a change before this can be looked at:", "", ...problems.map((p) => `- ${p}`), "");
@@ -41,10 +42,11 @@ if (problems.length) {
     "The plugin is audited when it is listed: `bun run submission:approve -- --issue <number>` builds it from the repository at its current commit, audits the source and the bundle, and records what it found with the version.",
   );
 } else {
-  const { report, commit, blocking } = await auditTemplate(parsed.repository!);
+  const { report, commit, blocking } = kind === "theme" ? await auditTheme(parsed.repository!) : await auditTemplate(parsed.repository!);
   lines.push(`Audited at \`${commit?.slice(0, 12) ?? "unknown"}\`:`, "", renderReport(report), "");
   if (blocking.length) lines.push("This cannot be listed as it stands:", "", ...blocking.map((b) => `- ${b}`));
   else lines.push("Nothing blocking. A maintainer decides from here; the checks above are a first pass and not a guarantee.");
+  if (kind === "theme") lines.push("", "The files themselves are audited when the theme is published: no JavaScript in the overlay, nothing outside the directories theme.json declares, one kind of file, and a size ceiling. What that finds is recorded with the version.");
   await Bun.write("audit.json", JSON.stringify({ report, commit }, null, 2));
 }
 

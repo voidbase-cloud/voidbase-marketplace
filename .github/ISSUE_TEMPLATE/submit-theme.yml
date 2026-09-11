@@ -1,0 +1,75 @@
+name: Submit a theme
+description: "Submit a theme: a repository with a theme.json, a pb_public overlay and the stylesheets a stack app imports."
+title: "[Theme]: "
+labels: ["submission", "theme"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Read this first.** A theme is listed, audited and served here, and it is **copied** rather than installed:
+        `voidbase plugins add` installs plugins, and there is no `voidbase themes add` in the package yet. The
+        marketplace serves every file of a published version with its hash, and a user copies the overlay over their
+        instance's `pb_public` and imports your stylesheet.
+
+        Your repository needs a `theme.json` in its root:
+
+        ```json
+        {
+          "name": "midnight",
+          "title": "Midnight",
+          "summary": "A dark theme for the panel and for a stack app's pages.",
+          "version": "1.0.0",
+          "licence": "MIT",
+          "author": "you",
+          "homepage": "https://example.com/midnight",
+          "carries": { "public": "pb_public", "styles": ["styles/midnight.scss"] }
+        }
+        ```
+
+        The audit is about what your files are: no JavaScript anywhere in the overlay (no script files, no `<script>`
+        tag, no inline event handler), nothing outside the directories `carries` declares, stylesheets, pages, images
+        and fonts only, 512 KB a file and 2 MB in total.
+  - type: input
+    id: repository
+    attributes:
+      label: Repository
+      description: A public GitHub repository with a theme.json in its root.
+      placeholder: https://github.com/you/your-voidbase-theme
+    validations: { required: true }
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      description: What it is called in the listing. Up to 60 characters.
+    validations: { required: true }
+  - type: input
+    id: summary
+    attributes:
+      label: One-line summary
+      description: What it looks like and what it covers. One line, up to 160 characters.
+    validations: { required: true }
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options: [Panel, Site, Docs, Minimal, Other]
+    validations: { required: true }
+  - type: dropdown
+    id: tags
+    attributes:
+      label: Tags
+      description: One to three.
+      multiple: true
+      options: [Dark, Light, Panel, Docs, Minimal, Accessible, Print, SCSS, CSS]
+    validations: { required: true }
+  - type: checkboxes
+    id: confirms
+    attributes:
+      label: Before you submit
+      options:
+        - label: The repository is public, has a licence, and has a theme.json in its root.
+          required: true
+        - label: The overlay contains no JavaScript, and every file it ships is inside what theme.json declares.
+          required: true
+        - label: It is mine to list, or I have the owner's agreement.
+          required: true

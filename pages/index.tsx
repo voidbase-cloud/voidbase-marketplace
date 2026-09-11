@@ -39,6 +39,12 @@ export default function Home() {
             Plugin submissions are open regardless, because what people want to build should shape the format rather
             than the other way round. {plugins ? `${plugins} registered so far.` : "None registered yet."}
           </dd>
+          <dt>You can copy a theme</dt>
+          <dd>
+            A theme is a <code>pb_public</code> overlay and the stylesheets a stack app imports. The marketplace
+            audits its files, hashes each one and serves them; you copy them. Nothing installs a theme, because
+            voidbase has no command that does.
+          </dd>
           <dt>There is no account, and nothing to pay</dt>
           <dd>
             No sign-in, no downloads counted, no ranking. When creators can charge for what they publish it will be

@@ -8,7 +8,7 @@
 // The audit is re-run rather than trusted from the earlier comment, because a repository can change between the
 // submission and the decision and the recorded commit has to be the one that was actually looked at.
 import { CATEGORIES, problemsWith, type Entry, type Kind, type Registry } from "../src/lib/registry";
-import { auditTemplate } from "./audit";
+import { auditTemplate, auditTheme } from "./audit";
 import { closeIssue, commentOnIssue, kindOf, must, parseSubmission, readIssue, toEntry } from "./submission";
 
 const issue = await readIssue();
@@ -24,8 +24,10 @@ let entry: Entry = toEntry(parsed, { submittedBy: issue.user.login, issue: issue
 const problems = problemsWith(entry, kind, registry.entries);
 if (problems.length) { console.error(`refusing to list ${parsed.repository}:\n${problems.map((p) => `  - ${p}`).join("\n")}`); process.exit(1); }
 
-if (kind === "template") {
-  const { report, commit, blocking } = await auditTemplate(entry.repository);
+// a template and a theme are listed with what the audit found at a commit; a plugin's audit belongs with the version
+// its pipeline builds, which is where it is recorded
+if (kind !== "plugin") {
+  const { report, commit, blocking } = kind === "theme" ? await auditTheme(entry.repository) : await auditTemplate(entry.repository);
   if (blocking.length) { console.error(`the audit blocks this listing:\n${blocking.map((b) => `  - ${b}`).join("\n")}`); process.exit(1); }
   entry = { ...entry, commit: commit ?? undefined, audit: report };
 }
@@ -35,8 +37,10 @@ registry.entries.sort((a, b) => a.repository.localeCompare(b.repository));
 await Bun.write(path, `${JSON.stringify(registry, null, 2)}\n`);
 console.log(`listed ${entry.repository} as a ${kind} in ${entry.category || CATEGORIES[kind][0]}`);
 
-// a plugin is also built, audited and served: the pipeline writes registry/v1/ and regenerates the index
+// a plugin and a theme are also served: the pipeline writes registry/v1/ and regenerates the index. A plugin is
+// built from its source; a theme has nothing to build, so its files are audited, hashed and copied as they are.
 if (kind === "plugin") must(["bun", "scripts/bundle.ts", entry.repository]);
+if (kind === "theme") must(["bun", "scripts/theme.ts", entry.repository]);
 
 // the deploy checks nothing, so the check happens here, before the listing can reach master
 must(["bun", "scripts/registry.ts", "check"]);

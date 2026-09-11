@@ -1,6 +1,7 @@
-// Retiring a listing: the entry leaves registry/<kind>s.json, a plugin's served versions leave registry/v1, the
-// index is regenerated, and the change is committed. An instance that installed a retired plugin keeps what it has
-// (the bytes are in its pb_plugins, pinned in its lockfile); it just cannot install or update it from here again.
+// Retiring a listing: the entry leaves registry/<kind>s.json, a plugin's or a theme's served versions leave
+// registry/v1, the index is regenerated, and the change is committed. An instance that installed a retired plugin
+// keeps what it has (the bytes are in its pb_plugins, pinned in its lockfile), and a project that copied a retired
+// theme keeps those files too; neither can be fetched from here again.
 //
 //   bun scripts/retire.ts <owner/name>                 retire the listing, commit
 //   bun scripts/retire.ts --issue <number>             the same, for the repository a removal issue names
@@ -24,22 +25,23 @@ if (args.includes("--issue")) {
 }
 
 let found: { kind: Kind; registry: Registry; path: string; name: string } | null = null;
-for (const kind of ["plugin", "template"] as Kind[]) {
+for (const kind of ["plugin", "theme", "template"] as Kind[]) {
   const path = `registry/${kind}s.json`;
   const registry = JSON.parse(await Bun.file(path).text()) as Registry;
   const entry = registry.entries.find((e) => e.repository === repository);
-  if (entry) { found = { kind, registry, path, name: repository.split("/")[1]!.replace(/^voidbase-plugin-/, "") }; break; }
+  if (entry) { found = { kind, registry, path, name: repository.split("/")[1]!.replace(/^voidbase-(plugin|theme)-/, "") }; break; }
 }
 if (!found) { console.error(`${repository} is not listed`); process.exit(1); }
 found.registry.entries = found.registry.entries.filter((e) => e.repository !== repository);
 await Bun.write(found.path, `${JSON.stringify(found.registry, null, 2)}\n`);
 let served = 0;
-if (found.kind === "plugin") {
-  // the served name is the manifest's, which is what registry/v1/plugins/<name> is called; the index says which
-  const index = JSON.parse(await Bun.file(join(REGISTRY_DIR, "index.json")).text()) as { plugins: { name: string; repository: string; versions: unknown[] }[] };
-  const listing = index.plugins.find((p) => p.repository === repository);
+if (found.kind !== "template") {
+  // the served name is the manifest's, which is what registry/v1/<kind>s/<name> is called; the index says which
+  type Listing = { name: string; repository: string; versions: unknown[] };
+  const index = JSON.parse(await Bun.file(join(REGISTRY_DIR, "index.json")).text()) as { plugins: Listing[]; themes?: Listing[] };
+  const listing = (found.kind === "theme" ? index.themes ?? [] : index.plugins).find((p) => p.repository === repository);
   const name = listing?.name ?? found.name; served = listing?.versions.length ?? 0;
-  const dir = join(REGISTRY_DIR, "plugins", name);
+  const dir = join(REGISTRY_DIR, `${found.kind}s`, name);
   if (existsSync(dir)) rmSync(dir, { recursive: true, force: true });
   writeIndex();
 }

@@ -78,11 +78,9 @@ export function parseSubmission(body: string, kind: Kind): Parsed {
 
 /** the kind an issue is about, from its labels or its title, so one command can serve both forms */
 export function kindOf(labels: string[], title: string): Kind | null {
-  if (labels.includes("template")) return "template";
-  if (labels.includes("plugin")) return "plugin";
-  if (/^\[template\]/i.test(title)) return "template";
-  if (/^\[plugin\]/i.test(title)) return "plugin";
-  return null;
+  for (const kind of ["template", "plugin", "theme"] as Kind[]) if (labels.includes(kind)) return kind;
+  const m = /^\[(template|plugin|theme)\]/i.exec(title);
+  return m ? (m[1]!.toLowerCase() as Kind) : null;
 }
 
 export function toEntry(parsed: Parsed, o: { submittedBy: string; issue: number; commit?: string }): Entry {

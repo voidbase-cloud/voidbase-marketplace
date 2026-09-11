@@ -20,6 +20,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         <nav>
           <Link href="/templates">Templates</Link>
           <Link href="/plugins">Plugins</Link>
+          <Link href="/themes">Themes</Link>
           <Link href="/submit">Submit</Link>
           <a href="https://voidbase.cloud/docs" target="_blank" rel="noreferrer noopener">Docs</a>
         </nav>

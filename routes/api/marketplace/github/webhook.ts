@@ -8,7 +8,7 @@
 import { defineHandler } from "void";
 import { env, on, publishJSON, queuePublish, signedBy } from "@/server";
 
-const SUBMISSION = ["template", "plugin"];
+const SUBMISSION = ["template", "plugin", "theme"];
 
 export const POST = defineHandler(async (c) => {
   const body = await c.req.raw.text();
@@ -20,7 +20,7 @@ export const POST = defineHandler(async (c) => {
   const p = JSON.parse(body) as { action: string; issue: { number: number; title: string; labels: { name: string }[] }; label?: { name: string } };
   const labels = (p.issue.labels ?? []).map((l) => l.name);
   const isRemoval = labels.includes("remove") || /^\[remove\]/i.test(p.issue.title);
-  const isSubmission = labels.some((l) => SUBMISSION.includes(l)) || /^\[(template|plugin)\]/i.test(p.issue.title);
+  const isSubmission = labels.some((l) => SUBMISSION.includes(l)) || /^\[(template|plugin|theme)\]/i.test(p.issue.title);
   if (!isSubmission && !isRemoval) return { ignored: "not a submission" };
   if (p.action === "labeled" && p.label?.name === "approved") {
     const r = await queuePublish(c, { issue: p.issue.number, kind: isRemoval ? "retire" : "publish", reason: `#${p.issue.number} approved` });

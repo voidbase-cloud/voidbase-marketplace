@@ -6,9 +6,10 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { integrityOf, problemsWithIndex, type RegistryIndex } from "@voidbase-cloud/voidbase/registry";
 import { problemsWith, type Kind, type Registry } from "../src/lib/registry";
+import { themeManifestOfFiles, type ThemeFile } from "../src/lib/theme";
 import { REGISTRY_DIR, renderIndex } from "./registry-index";
 
-const kinds: Kind[] = ["template", "plugin"];
+const kinds: Kind[] = ["template", "plugin", "theme"];
 let bad = 0;
 
 for (const kind of kinds) {
@@ -33,7 +34,10 @@ for (const kind of kinds) {
 const indexPath = join(REGISTRY_DIR, "index.json");
 const fresh = renderIndex();
 if ((existsSync(indexPath) ? readFileSync(indexPath, "utf8") : "") !== fresh) { console.error("FAIL  registry/v1/index.json is stale or missing: run bun scripts/registry-index.ts"); bad++; }
-const index = JSON.parse(fresh) as RegistryIndex;
+// themes are a key voidbase's validator does not know, which is the point: it validates what it knows and ignores
+// the rest, so an index with themes in it is the same index to a client that has never heard of one
+type ServedTheme = { name: string; latest: string; versions: { version: string; integrity: string; bytes: number; base: string; files: ThemeFile[] }[] };
+const index = JSON.parse(fresh) as RegistryIndex & { themes?: ServedTheme[] };
 const problems = problemsWithIndex(index);
 if (problems.length) { console.error(`FAIL  registry/v1/index.json is not a registry an instance can read:\n  - ${problems.join("\n  - ")}`); bad++; }
 for (const p of index.plugins) {
@@ -43,6 +47,20 @@ for (const p of index.plugins) {
     if (!bytes || bytes.length !== v.bytes || (await integrityOf(bytes)) !== v.integrity) { console.error(`FAIL  ${p.name} ${v.version}: the bundle is not the bytes its record promises`); bad++; }
   }
 }
-console.log(`${bad ? "" : "PASS  "}registry/v1/index.json: ${index.plugins.length} plugin release(s), ${index.templates?.length ?? 0} template(s), every bundle matches its record`);
+for (const t of index.themes ?? []) {
+  for (const v of t.versions) {
+    let wrong = 0;
+    for (const f of v.files) {
+      const file = join(REGISTRY_DIR, v.base, f.path);
+      const bytes = existsSync(file) ? new Uint8Array(readFileSync(file)) : null;
+      if (!bytes || bytes.length !== f.bytes || (await integrityOf(bytes)) !== f.integrity) { console.error(`FAIL  ${t.name} ${v.version}: ${f.path} is not the bytes its record promises`); wrong++; }
+    }
+    const listed = await integrityOf(new TextEncoder().encode(themeManifestOfFiles(v.files)));
+    if (listed !== v.integrity) { console.error(`FAIL  ${t.name} ${v.version}: the version's integrity is not the hash of its file list`); wrong++; }
+    if (v.files.reduce((n, f) => n + f.bytes, 0) !== v.bytes) { console.error(`FAIL  ${t.name} ${v.version}: bytes is not what its files add up to`); wrong++; }
+    bad += wrong;
+  }
+}
+console.log(`${bad ? "" : "PASS  "}registry/v1/index.json: ${index.plugins.length} plugin release(s), ${index.themes?.length ?? 0} theme release(s), ${index.templates?.length ?? 0} template(s), every file matches its record`);
 
 process.exit(bad ? 1 : 0);

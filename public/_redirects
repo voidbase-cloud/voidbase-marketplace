@@ -1,0 +1,5 @@
+# On Cloudflare the asset layer answers every path outside /api and the Worker is never invoked for one (voidbase,
+# docs/platform.md), so the registry's own address for the diff is carried to the /api route that answers it, the way
+# the seo plugin carries /robots.txt to /api/seo/robots.txt. The query string is passed through. Everything else under
+# /registry/v1 is a real file and has no rule: the index, the version records, the bundles and a theme's files.
+/registry/v1/plugins/:name/diff  /api/registry/v1/plugins/:name/diff  302

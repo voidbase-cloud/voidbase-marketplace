@@ -48,7 +48,11 @@ for (;;) {
       if (r.code !== 0) { await fail(r.out.slice(-1500)); continue; }
       console.log(r.out.trim().split("\n").slice(-3).join("\n"));
     } else {
-      const r = quiet(["bun", "scripts/bundle.ts", job.repository, ...(job.ref ? [job.ref] : [])]);
+      // which pipeline a version goes through is the listing's business, not the queue's: a theme is listed in
+      // registry/themes.json and has nothing to build, so its files are audited, hashed and copied as they are
+      const themes = (await Bun.file("registry/themes.json").json().catch(() => ({ entries: [] }))) as { entries: { repository: string }[] };
+      const script = themes.entries.some((e) => e.repository === job.repository) ? "scripts/theme.ts" : "scripts/bundle.ts";
+      const r = quiet(["bun", script, job.repository, ...(job.ref ? [job.ref] : [])]);
       // a version this marketplace already serves is nothing to do, not a failure (a daily check or a hand can ask twice)
       const served = /is already published/.test(r.out);
       if (r.code !== 0 && !served) { await fail(r.out.slice(-1500)); continue; }

@@ -8,7 +8,7 @@
 // The marketplace builds and audits; it never runs the plugin. Everything it writes is what an instance verifies for
 // itself: the bundle's bytes against the record's integrity, and the loaded bundle's manifest against the record's
 // (voidbase, docs/registry.md). A version is immutable once written; a change is a new version.
-import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
 import { KNOWN } from "@voidbase-cloud/voidbase/interfaces";
@@ -62,6 +62,9 @@ export async function bundlePlugin(repository: string, ref?: string, o: { force?
   try {
     await checkoutAt(repo, commit, work);
     log(`checked out ${repo}@${commit.slice(0, 12)}`);
+    // the source as it stood at that commit, by path and size, read before anything is installed so an install
+    // artifact is not mistaken for the author's file: this is what /registry/v1/plugins/<name>/diff compares
+    const tree = walk(work).map((f) => ({ path: relative(work, f).split("\\").join("/"), bytes: statSync(f).size })).sort((a, b) => a.path.localeCompare(b.path));
 
     // the manifest: the plugin's own claim about itself, checked the way the loader checks it
     let manifest: PluginManifest | null = null;
@@ -91,7 +94,7 @@ export async function bundlePlugin(repository: string, ref?: string, o: { force?
     if (manifest && typeof pkg.version === "string" && pkg.version !== manifest.version) add("package.json and plugin.json agree on the version", false, `package.json says ${pkg.version}, plugin.json ${manifest.version}`, true);
 
     // the source, read for what is worth a second look; a match is for a person to weigh, not proof
-    const files = walk(work).filter((f) => SOURCE.test(f));
+    const files = tree.filter((f) => SOURCE.test(f.path)).map((f) => join(work, f.path));
     const found: string[] = [];
     for (const f of files) { const text = readFileSync(f, "utf8"); for (const [re, why] of SMELLS) if (re.test(text)) found.push(`${relative(work, f)} ${why}`); }
     add("nothing obviously alarming in the source", !found.length, found.length ? found.join("; ") : `read ${files.length} file(s)`);
@@ -126,6 +129,7 @@ export async function bundlePlugin(repository: string, ref?: string, o: { force?
     const bytes = Buffer.byteLength(text);
     add("is small enough to read", bytes <= MAX_BYTES, `${bytes} bytes${bytes > MAX_BYTES ? `, over the ${MAX_BYTES} limit` : ""}`, true);
     add("the manifest is the source's", true, `plugin.json at ${commit.slice(0, 12)}; an instance checks the loaded bundle says the same`);
+    add("the files it was built from are recorded", true, `${tree.length} file(s) at ${commit.slice(0, 12)}, by path and size, so a later version can be diffed against this one`);
     if (blocking.length) return stop();
 
     const digest = new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)));
@@ -135,7 +139,7 @@ export async function bundlePlugin(repository: string, ref?: string, o: { force?
     if (existsSync(recordPath) && !o.force) { add("the version is new", false, `${name} ${version} is already published; a change is a new version (--force overwrites one, for a mistake)`, true); return stop(); }
     mkdirSync(join(dir, version), { recursive: true });
     writeFileSync(join(dir, version, "bundle.js"), text);
-    const record = { version, manifest, integrity, bundle: `plugins/${name}/${version}/bundle.js`, bytes, source: { repository: repo, commit }, publishedOn: new Date().toISOString().slice(0, 10), audit: { ranOn: new Date().toISOString(), checks } };
+    const record = { version, manifest, integrity, bundle: `plugins/${name}/${version}/bundle.js`, bytes, files: tree, source: { repository: repo, commit }, publishedOn: new Date().toISOString().slice(0, 10), audit: { ranOn: new Date().toISOString(), checks } };
     writeFileSync(recordPath, `${JSON.stringify(record, null, 2)}\n`);
     writeIndex();
     log(`wrote ${relative(process.cwd(), recordPath)} and its bundle (${bytes} bytes, ${integrity})`);

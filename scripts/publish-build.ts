@@ -39,6 +39,10 @@ for (;;) {
       const r = quiet(["bun", "scripts/validate.ts", "--issue", String(job.issue), "--post"]);
       if (r.code !== 0) { await fail(r.out.slice(-1500)); continue; }
       console.log(r.out.trim().split("\n").slice(-3).join("\n"));
+    } else if (job.kind === "retire") {
+      const r = quiet(["bun", "scripts/retire.ts", ...(job.issue ? ["--issue", String(job.issue)] : [job.repository])]);
+      if (r.code !== 0) { await fail(r.out.slice(-1500)); continue; }
+      console.log(r.out.trim().split("\n").slice(-3).join("\n"));
     } else if (job.issue) {
       const r = quiet(["bun", "scripts/approve.ts", "--issue", String(job.issue)]);
       if (r.code !== 0) { await fail(r.out.slice(-1500)); continue; }

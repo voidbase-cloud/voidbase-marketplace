@@ -54,6 +54,10 @@ try {
   check("the same submission edited while its validation is queued is not queued twice", edited.json?.duplicate === true && (await cfState()).builds.length === 1, JSON.stringify(edited.json).slice(0, 200));
   const approved = await hook("issues", { action: "labeled", label: { name: "approved" }, issue: { ...issue, labels: [...issue.labels, { name: "approved" }] } });
   check("the approved label queues the publish (a second row); the build already pending is reused, not started again", approved.status === 200 && approved.json.queued?.kind === "publish" && approved.json.duplicate === false && approved.json.started === "started" && (await cfState()).builds.length === 1, JSON.stringify(approved.json).slice(0, 300));
+  const removal = { number: 9, title: "[remove] example/voidbase-plugin-echo", labels: [] as { name: string }[], user: { login: "someone" } };
+  const rmOpened = await hook("issues", { action: "opened", issue: removal });
+  const rmApproved = await hook("issues", { action: "labeled", label: { name: "approved" }, issue: { ...removal, labels: [{ name: "approved" }] } });
+  check("a removal issue is validated when opened and queued to retire when a maintainer approves it", rmOpened.json?.queued?.kind === "validate" && rmOpened.json.queued.issue === 9 && rmApproved.json?.queued?.kind === "retire" && rmApproved.json.queued.issue === 9, JSON.stringify([rmOpened.json, rmApproved.json]).slice(0, 300));
   check("a stranger's event with the right signature but no submission label is ignored", (await hook("issues", { action: "opened", issue: { number: 8, title: "bug: it broke", labels: [], user: { login: "x" } } })).json?.ignored === "not a submission");
   check("the queue is for superusers", (await api("GET", "/api/marketplace/publish/next")).status === 401 && (await api("GET", "/api/marketplace/publish")).status === 401);
   const first = await api("GET", "/api/marketplace/publish/next", undefined, SU);
@@ -63,10 +67,15 @@ try {
   check("done records it; the next claim is the publish of the approved issue", done.json?.publish?.status === "done" && second.json?.kind === "publish" && second.json.issue === 7, JSON.stringify([done.json, second.json]).slice(0, 300));
   const failed = await api("POST", `/api/marketplace/publish/${second.json.id}/failed`, { error: "the audit blocks this listing: no licence" }, SU);
   check("a failure keeps its reason", failed.json?.publish?.status === "failed" && /no licence/.test(failed.json.publish.error), JSON.stringify(failed.json).slice(0, 200));
+  const rmV = await api("GET", "/api/marketplace/publish/next", undefined, SU); await api("POST", `/api/marketplace/publish/${rmV.json?.id}/done`, {}, SU);
+  const rmR = await api("GET", "/api/marketplace/publish/next", undefined, SU); await api("POST", `/api/marketplace/publish/${rmR.json?.id}/done`, { commit: "def" }, SU);
+  check("the removal's validation and then its retirement are claimed in order", rmV.json?.kind === "validate" && rmV.json.issue === 9 && rmR.json?.kind === "retire" && rmR.json.issue === 9, JSON.stringify([rmV.json, rmR.json]).slice(0, 300));
   check("nothing left: 204", (await api("GET", "/api/marketplace/publish/next", undefined, SU)).status === 204);
   const byHand = await api("POST", "/api/marketplace/publish", { repository: "Example/voidbase-plugin-echo", ref: "v0.3.0", reason: "a maintainer" }, SU);
   check("a version queued by hand: repository lowercased, ref kept, build started", byHand.status === 200 && byHand.json.publish?.repository === "example/voidbase-plugin-echo" && byHand.json.publish.ref === "v0.3.0" && byHand.json.started === "started", JSON.stringify(byHand.json).slice(0, 200));
   check("neither an issue nor a repository is refused", (await api("POST", "/api/marketplace/publish", { reason: "?" }, SU)).status === 400);
+  const retireByHand = await api("POST", "/api/marketplace/publish", { repository: "example/voidbase-plugin-echo", kind: "retire", reason: "a maintainer" }, SU);
+  check("a retirement queued by hand: kind retire, the repository named, no ref", retireByHand.status === 200 && retireByHand.json.publish?.kind === "retire" && retireByHand.json.publish.repository === "example/voidbase-plugin-echo", JSON.stringify(retireByHand.json).slice(0, 200));
   const cron = await api("POST", "/api/crons/refresh", undefined, SU);
   // the tick answers before it is over: the row is polled for
   let list = await api("GET", "/api/marketplace/publish", undefined, SU); let fromCron: { kind: string; reason: string } | undefined;

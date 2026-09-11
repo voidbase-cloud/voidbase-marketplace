@@ -3,10 +3,11 @@
 //   publish of an issue     a submission a maintainer approved (the `approved` label): list it, build a plugin, commit, answer, close
 //   publish of a version    a listed plugin's new tag (the daily check, or a maintainer): build it, commit
 //   validate of an issue    a submission just opened or edited: audit it and comment, so the decision is cheap
+//   retire                  a listing leaves (a removal issue a maintainer approved, or a maintainer by hand)
 import { pb, type HookRecord } from "./pb";
 import { startPublisher } from "./builds";
 
-export type Kind = "publish" | "validate";
+export type Kind = "publish" | "validate" | "retire";
 export interface PublishInput { repository?: string; ref?: string; issue?: number; kind: Kind; reason: string }
 type Ctx = { env: unknown };
 interface Runs { create(o: { id: string; params: { publishId: string } }): Promise<unknown>; get(id: string): Promise<{ sendEvent(e: { type: string; payload: unknown }): Promise<unknown> }> }

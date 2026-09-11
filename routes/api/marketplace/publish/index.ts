@@ -1,6 +1,6 @@
 // GET  /api/marketplace/publish   the queue, newest first (superusers)
 // POST /api/marketplace/publish   queue one: { repository, ref } for a version, { issue } for a submission,
-//                                 kind "publish" (default) or "validate"
+//                                 kind "publish" (default), "validate", or "retire" (the listing leaves)
 import { defineHandler } from "void";
 import { pb, requireSuperuser } from "@voidbase-cloud/voidbase/adapter";
 import { publishJSON, queuePublish, type HookRecord, type Kind } from "@/server";
@@ -13,7 +13,7 @@ export const GET = defineHandler(requireSuperuser(), async () => {
 export const POST = defineHandler(requireSuperuser(), async (c) => {
   const body = (await c.req.raw.clone().json().catch(() => ({}))) as Record<string, unknown>;
   const issue = Number(body.issue ?? 0) || 0; const repository = String(body.repository ?? "").trim().toLowerCase(); const ref = String(body.ref ?? "").trim();
-  const kind: Kind = body.kind === "validate" ? "validate" : "publish";
+  const kind: Kind = body.kind === "validate" ? "validate" : body.kind === "retire" ? "retire" : "publish";
   if (!issue && !/^[a-z0-9-]+\/[a-z0-9._-]+$/.test(repository)) throw new pb.BadRequestError("Say which: { issue } for a submission, or { repository, ref } for a version.");
   if (kind === "validate" && !issue) throw new pb.BadRequestError("A validation is of an issue.");
   const r = await queuePublish(c, { repository: issue ? undefined : repository, ref: issue ? undefined : ref, issue: issue || undefined, kind, reason: String(body.reason ?? "queued by hand") });

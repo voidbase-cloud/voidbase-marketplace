@@ -1,8 +1,9 @@
 // POST /api/marketplace/github/webhook — GitHub's `issues` events for this repository, signed with MP_WEBHOOK_SECRET.
 //
 // A submission opened or edited is queued for validation (the audit comment); one labelled `approved` is queued for
-// publishing (listed, built, committed, answered, closed). That is the whole maintainer flow: read the comment, add
-// the label. MARKETPLACE_SUBMISSIONS off (Flagship) answers 200 and queues nothing, which pauses submissions without
+// publishing (listed, built, committed, answered, closed). A removal ("[remove] owner/name" in the title, or the
+// `remove` label) labelled `approved` is queued for retiring. That is the whole maintainer flow: read the comment,
+// add the label. MARKETPLACE_SUBMISSIONS off (Flagship) answers 200 and queues nothing, which pauses submissions without
 // touching GitHub.
 import { defineHandler } from "void";
 import { env, on, publishJSON, queuePublish, signedBy } from "@/server";
@@ -18,10 +19,11 @@ export const POST = defineHandler(async (c) => {
   if (!on("MARKETPLACE_SUBMISSIONS", true)) return { paused: true };
   const p = JSON.parse(body) as { action: string; issue: { number: number; title: string; labels: { name: string }[] }; label?: { name: string } };
   const labels = (p.issue.labels ?? []).map((l) => l.name);
+  const isRemoval = labels.includes("remove") || /^\[remove\]/i.test(p.issue.title);
   const isSubmission = labels.some((l) => SUBMISSION.includes(l)) || /^\[(template|plugin)\]/i.test(p.issue.title);
-  if (!isSubmission) return { ignored: "not a submission" };
+  if (!isSubmission && !isRemoval) return { ignored: "not a submission" };
   if (p.action === "labeled" && p.label?.name === "approved") {
-    const r = await queuePublish(c, { issue: p.issue.number, kind: "publish", reason: `#${p.issue.number} approved` });
+    const r = await queuePublish(c, { issue: p.issue.number, kind: isRemoval ? "retire" : "publish", reason: `#${p.issue.number} approved` });
     return { queued: publishJSON(r.row), started: r.started, duplicate: r.duplicate };
   }
   if (p.action === "opened" || p.action === "edited" || p.action === "reopened") {

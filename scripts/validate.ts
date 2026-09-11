@@ -12,7 +12,16 @@ import { commentOnIssue, kindOf, parseSubmission, readIssue, toEntry } from "./s
 const issue = await readIssue();
 
 const kind: Kind | null = kindOf(issue.labels.map((l) => l.name), issue.title);
-if (!kind) { console.log("not a submission issue; nothing to do"); process.exit(0); }
+if (!kind) {
+  if (/^\[remove\]/i.test(issue.title) || issue.labels.some((l) => l.name === "remove")) {
+    const target = issue.title.replace(/^\[remove\]\s*/i, "").trim();
+    const note = `**Removal request for \`${target || "(unnamed)"}\`**\n\nA maintainer confirms it with the \`approved\` label; the listing then leaves the marketplace, and instances that installed it keep what they have.`;
+    console.log(note);
+    if (process.argv.includes("--post")) { await commentOnIssue(issue.number, note); console.log(`\nposted on #${issue.number}`); }
+    process.exit(0);
+  }
+  console.log("not a submission issue; nothing to do"); process.exit(0);
+}
 
 const parsed = parseSubmission(issue.body ?? "", kind);
 const registry = await readRegistry(kind);

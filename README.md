@@ -76,8 +76,12 @@ Workflow (`workflows/publish.ts`) starts the `voidbase-marketplace (publish)` bu
 watches it, and that build (`scripts/publish-build.ts`) claims the rows, runs the same scripts a maintainer would,
 commits and pushes; the push deploys. Two Flagship flags hold the pipeline without a deploy: `MARKETPLACE_SUBMISSIONS`
 (the webhook queues nothing while off) and `MARKETPLACE_AUTO_VERSIONS` (the daily check publishes nothing while off).
-A superuser can queue by hand, `POST /api/marketplace/publish` with `{ issue }` or `{ repository, ref }`, and read
-the queue at `GET /api/marketplace/publish`; `bun test` (`test/publish.ts`) is the pipeline against mocks.
+A listing leaves the same way: an issue titled `[remove] owner/name` (or labelled `remove`) is answered when
+opened and, once a maintainer adds `approved`, retired: the entry leaves the listing, a plugin's served versions
+leave `registry/v1`, the index is regenerated, one commit, the issue closed (`scripts/retire.ts`). Instances that
+installed it keep what they have. A superuser can queue by hand, `POST /api/marketplace/publish` with `{ issue }`,
+`{ repository, ref }` or `{ repository, kind: "retire" }`, and read the queue at `GET /api/marketplace/publish`;
+`bun test` (`test/publish.ts`) is the pipeline against mocks.
 
 By hand, from a machine with `gh` signed in, the scripts still work: `bun run submission:validate -- --issue <n>
 --post`, `bun run submission:approve -- --issue <n>`, `bun run plugin:bundle <owner/name> [ref]`.

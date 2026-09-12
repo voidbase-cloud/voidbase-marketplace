@@ -6,7 +6,7 @@
       "name": "voidbase-marketplace",
       "dependencies": {
         "@void/react": "^0.10.13",
-        "@voidbase-cloud/voidbase": "0.9.0-beta.56",
+        "@voidbase-cloud/voidbase": "0.9.0-beta.57",
         "react": "^19.2.8",
         "react-dom": "^19.2.8",
       },
@@ -446,27 +446,35 @@
 
     "@void/react": ["@void/react@0.10.13", "", { "dependencies": { "@vitejs/plugin-react": "^6.0.3" }, "peerDependencies": { "react": "^19.0.0", "react-dom": "^19.0.0", "vite": "^8.0.0", "void": "0.10.13" } }, "sha512-5aYko0xjF34QJllczCqpqWAH5K4vfzAnvfpTdjTYo2fydTtpVejkVgvFBz+dArDY+SkH/4PRz7o+MZl1u8JA+A=="],
 
-    "@voidbase-cloud/plugin-backups": ["@voidbase-cloud/plugin-backups@0.9.0-beta.56", "", { "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.56" } }, "sha512-NJLqOImvWG0qWM5Mop5E9YrLRHPp4P1DzjP6LLOYwkiULf9qNeDgTxH9ToOK9ZwPeUJ9v2/MvQ95azc+siBnXw=="],
+    "@voidbase-cloud/plugin-ai": ["@voidbase-cloud/plugin-ai@0.9.0-beta.57", "", { "dependencies": { "@voidbase-cloud/plugin-mcp": "0.9.0-beta.57", "@voidbase-cloud/plugin-openapi": "0.9.0-beta.57" }, "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.57", "hono": "^4.11.9" } }, "sha512-AkAdZK2VDEFI1hQTHrXvEYo+Yx6FtgKqy/8m8MPqZIjKNbTXVsiGEa9aXkwMqv9IzNoJcZuA3sR476ylZc1CVg=="],
 
-    "@voidbase-cloud/plugin-domains": ["@voidbase-cloud/plugin-domains@0.9.0-beta.56", "", { "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.56" } }, "sha512-awkIE6VGU8AcAuF/8jz3LUFaAc7hWsjhiVW+xSmHGXJUECdmPy+HRvYzFgCbzrOtdvaD16CbhmOxwekBBF7eZQ=="],
+    "@voidbase-cloud/plugin-backups": ["@voidbase-cloud/plugin-backups@0.9.0-beta.57", "", { "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.57" } }, "sha512-BE23F1yi/7qRqNTxaytbHz8g2zhDZ1deq95PVgUgNddr3NJuKImzQU1eSM7CJWH+kcSoeEMCSfa3r6z29YzVaA=="],
 
-    "@voidbase-cloud/plugin-hardening": ["@voidbase-cloud/plugin-hardening@0.9.0-beta.56", "", { "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.56" } }, "sha512-mxqZzV4DdpQbPZ+mZtwDe/0pEVNkSYNHSO8V3QQ0tSdfj7kBLZognZ3HgJpeF8DjHPtdjq9sUTc1/Qm+gKquvg=="],
+    "@voidbase-cloud/plugin-domains": ["@voidbase-cloud/plugin-domains@0.9.0-beta.57", "", { "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.57" } }, "sha512-55kjr5NR/QVKuNHzSuYrCADuhmUuzzKvmLxmfBspQwT0WA8V7WGBt/w2I75nV40xq1krScahDcdjboIp8mV9nQ=="],
 
-    "@voidbase-cloud/plugin-mail": ["@voidbase-cloud/plugin-mail@0.9.0-beta.56", "", { "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.56" } }, "sha512-VmUPjrah/u2Qv1Ky0HZ+z4Przvnc+LybwR6HNXMc1Cd0bKMvIVzpHlr3yaXA/i7IKCRurcZLmqUB+uRXky1BhQ=="],
+    "@voidbase-cloud/plugin-hardening": ["@voidbase-cloud/plugin-hardening@0.9.0-beta.57", "", { "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.57" } }, "sha512-8io+lrzCSFfiewtctNF8+/r3pWL34gjwgAPbPqr5gKgsEoXJLpKw88oP+kR4i2UvAfDp2vZgR49d0EC/mQ/2qw=="],
 
-    "@voidbase-cloud/plugin-observability": ["@voidbase-cloud/plugin-observability@0.9.0-beta.56", "", { "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.56", "hono": "^4.11.9" } }, "sha512-XXeuBJcqN1E7C6rA2Os2A4vJVWtvVGPSflBXr2mo5AabA8Lhsu0ZvBT8WEjpuFEQ/CaSNjmFRHCVzdEtk6pDhQ=="],
+    "@voidbase-cloud/plugin-mail": ["@voidbase-cloud/plugin-mail@0.9.0-beta.57", "", { "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.57" } }, "sha512-fzpulLABpIS3Ohzu8ebMqSsWHoqF/9eTgqnW0TnMv8WW6KT8ielbTvvfB/0YHrsjthSPMcKPS5k3Pbo86fwrDQ=="],
 
-    "@voidbase-cloud/plugin-previews": ["@voidbase-cloud/plugin-previews@0.9.0-beta.56", "", { "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.56", "hono": "^4.11.9" } }, "sha512-uMrl4dHvWv00EkRuLGrCyFUW2r+A0KwuJXfqUka3pmecuBoPC2p5bJNHnfal/w2XUipZnJDWJFA7wVAJvU7EeA=="],
+    "@voidbase-cloud/plugin-mcp": ["@voidbase-cloud/plugin-mcp@0.9.0-beta.57", "", { "dependencies": { "@voidbase-cloud/plugin-openapi": "0.9.0-beta.57" }, "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.57", "hono": "^4.11.9" } }, "sha512-+I2j7GcBzVrexufr/kQLaJXkiGtWN6XPEmTiyPxfThTVeLHN88ZfdqU0zY23WC42pkjVgrYWyMz7E2OFD+p2Yw=="],
 
-    "@voidbase-cloud/plugin-realtime": ["@voidbase-cloud/plugin-realtime@0.9.0-beta.56", "", { "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.56" } }, "sha512-nYbtuBgBeIHNw0TiPfDhAclo5mJgE7N6fra33hZoyJwuraqltpkKSoF8xwsvr9VRi5IOpgz0fHJfVZg0Kld8oA=="],
+    "@voidbase-cloud/plugin-observability": ["@voidbase-cloud/plugin-observability@0.9.0-beta.57", "", { "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.57", "hono": "^4.11.9" } }, "sha512-dke8l60rSeccDRfcpVY36lOQZ3vC21LG4q3qDD8ClFueesh+59bYW4YlHHLIsDjFfEW1dnO/8thiKWA5qUL/Hg=="],
 
-    "@voidbase-cloud/plugin-shipping-flat": ["@voidbase-cloud/plugin-shipping-flat@0.9.0-beta.56", "", { "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.56" } }, "sha512-LwlocadoVX+qImdsvzWZNwUZcx386OzHKMtrFOeSCirQGz7jQV+eRe3dJrTm5V7W3QgNt1oMv2vmcL7Qv/0wWw=="],
+    "@voidbase-cloud/plugin-openapi": ["@voidbase-cloud/plugin-openapi@0.9.0-beta.57", "", { "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.57", "hono": "^4.11.9" } }, "sha512-Gkx7//Oq7i28PkwFLVPJCFS0lkh4RQk+OoJ1WPY+EiDsGNGsxOsvVFdK3PyeB028armfYNzGxvEnhYJsfACEGw=="],
 
-    "@voidbase-cloud/plugin-tax-flat": ["@voidbase-cloud/plugin-tax-flat@0.9.0-beta.56", "", { "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.56" } }, "sha512-m2GHqRnY+YBEQqV/frvekJd4JSBF1ZlE8LssJ99jzg/LiTNRRAiZIB+G2eSkQCVnIPZ5pOptzslwRGKOPZrqGg=="],
+    "@voidbase-cloud/plugin-previews": ["@voidbase-cloud/plugin-previews@0.9.0-beta.57", "", { "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.57", "hono": "^4.11.9" } }, "sha512-tgHU/18pxQ5RpuWo8Xjte3Yum17eYCimX972hjS4P5Ls8b+UM64irxMmbROLIw2uCmOQS+jNTI+EvgXgv/MOww=="],
 
-    "@voidbase-cloud/plugin-translations": ["@voidbase-cloud/plugin-translations@0.9.0-beta.56", "", { "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.56", "hono": "^4.11.9" } }, "sha512-DTfDy133MENz6h8wQ8wfV1IOLxGpQzVW6aJNtPFfQpn5rCKln5rWwqlJIxGsi6ksEFbeT6GsQiyA3e+QOrgRkg=="],
+    "@voidbase-cloud/plugin-realtime": ["@voidbase-cloud/plugin-realtime@0.9.0-beta.57", "", { "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.57" } }, "sha512-MkjJWUTf6lvyw7wv/e1aMhoSsRnUSxJmE1IdDYrXT7mvqrQagbKqJyF/eEWhzgn+zulax6rKhfjgtNN4vQ9Bqw=="],
 
-    "@voidbase-cloud/voidbase": ["@voidbase-cloud/voidbase@0.9.0-beta.56", "", { "dependencies": { "@cf-wasm/photon": "^0.4.0", "@cloudflare/workers-types": "^4.20250903.0", "@resvg/resvg-wasm": "2.6.2", "@simplewebauthn/server": "^14.0.1", "@voidbase-cloud/plugin-backups": "0.9.0-beta.56", "@voidbase-cloud/plugin-domains": "0.9.0-beta.56", "@voidbase-cloud/plugin-hardening": "0.9.0-beta.56", "@voidbase-cloud/plugin-mail": "0.9.0-beta.56", "@voidbase-cloud/plugin-observability": "0.9.0-beta.56", "@voidbase-cloud/plugin-previews": "0.9.0-beta.56", "@voidbase-cloud/plugin-realtime": "0.9.0-beta.56", "@voidbase-cloud/plugin-shipping-flat": "0.9.0-beta.56", "@voidbase-cloud/plugin-tax-flat": "0.9.0-beta.56", "@voidbase-cloud/plugin-translations": "0.9.0-beta.56", "bcryptjs": "^3.0.2", "cordis": "4.0.0-rc.9", "fflate": "^0.8.3", "hono": "^4.11.9", "typescript": "^5.9.3", "vite": "^8.0.10", "vite-plus": "^0.1.21", "void": "^0.10.13" }, "bin": { "voidbase": "bin/voidbase.ts" } }, "sha512-UZLM6/OYQLTopQxWpOjCKm1HKxgrGavxbaQNkBhvgYHVP7nYp3H/+rro3zWV8Fefx6Tcy8UXNg4YbLJRbu5ipw=="],
+    "@voidbase-cloud/plugin-seo": ["@voidbase-cloud/plugin-seo@0.9.0-beta.57", "", { "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.57", "hono": "^4.11.9" } }, "sha512-cbJFy6VB3JHuPKfoZIzMib5Z/dgxrgX13DEtJxHNTskgTYiau8LenjFpkq6pFU2pZHxrX380Fw4ka0bWatzFaQ=="],
+
+    "@voidbase-cloud/plugin-shipping-flat": ["@voidbase-cloud/plugin-shipping-flat@0.9.0-beta.57", "", { "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.57" } }, "sha512-4vriCN+9x9QOIdMyBcSxzXi+1F3dQ1vMDaiLXgchRoqiovL+7PTvZw4Pb+o1ECqhUyOU0IvFBIDkQojPwOOMoQ=="],
+
+    "@voidbase-cloud/plugin-tax-flat": ["@voidbase-cloud/plugin-tax-flat@0.9.0-beta.57", "", { "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.57" } }, "sha512-Js1CGvFHYTR/4GGkSjnTqnIW2hfxCC9rroSglOTZ+IhILmKBUaNv4P0dQU+mb537CyDl7d8obrFe67ushLB40g=="],
+
+    "@voidbase-cloud/plugin-translations": ["@voidbase-cloud/plugin-translations@0.9.0-beta.57", "", { "peerDependencies": { "@voidbase-cloud/voidbase": "0.9.0-beta.57", "hono": "^4.11.9" } }, "sha512-vSV/o8S9A/XliF0W9FTC1TKpNt6zkcBYSJTEEAu8ar/UejjOPiag94EPeNk5UFdsSV37MiHbTL29aCvnuxGz+Q=="],
+
+    "@voidbase-cloud/voidbase": ["@voidbase-cloud/voidbase@0.9.0-beta.57", "", { "dependencies": { "@cf-wasm/photon": "^0.4.0", "@cloudflare/workers-types": "^4.20250903.0", "@resvg/resvg-wasm": "2.6.2", "@simplewebauthn/server": "^14.0.1", "@voidbase-cloud/plugin-ai": "0.9.0-beta.57", "@voidbase-cloud/plugin-backups": "0.9.0-beta.57", "@voidbase-cloud/plugin-domains": "0.9.0-beta.57", "@voidbase-cloud/plugin-hardening": "0.9.0-beta.57", "@voidbase-cloud/plugin-mail": "0.9.0-beta.57", "@voidbase-cloud/plugin-mcp": "0.9.0-beta.57", "@voidbase-cloud/plugin-observability": "0.9.0-beta.57", "@voidbase-cloud/plugin-openapi": "0.9.0-beta.57", "@voidbase-cloud/plugin-previews": "0.9.0-beta.57", "@voidbase-cloud/plugin-realtime": "0.9.0-beta.57", "@voidbase-cloud/plugin-seo": "0.9.0-beta.57", "@voidbase-cloud/plugin-shipping-flat": "0.9.0-beta.57", "@voidbase-cloud/plugin-tax-flat": "0.9.0-beta.57", "@voidbase-cloud/plugin-translations": "0.9.0-beta.57", "bcryptjs": "^3.0.2", "cordis": "4.0.0-rc.9", "fflate": "^0.8.3", "hono": "^4.11.9", "typescript": "^5.9.3", "vite": "^8.0.10", "vite-plus": "^0.1.21", "void": "^0.10.13" }, "bin": { "voidbase": "bin/voidbase.ts" } }, "sha512-xxaekuWOLqjxmvMfy7dbEVBWq9kP4ZFzJhVTof4JxTSVtwYW9/DzKiG3jhFuz5q/umbXvTChxmi5X2sI1bkR6A=="],
 
     "@voidzero-dev/vite-plus-core": ["@voidzero-dev/vite-plus-core@0.1.24", "", { "dependencies": { "@oxc-project/runtime": "=0.133.0", "@oxc-project/types": "=0.133.0", "lightningcss": "^1.30.2", "postcss": "^8.5.6" }, "optionalDependencies": { "fsevents": "~2.3.3" }, "peerDependencies": { "@arethetypeswrong/core": "^0.18.1", "@tsdown/css": "0.22.1", "@tsdown/exe": "0.22.1", "@types/node": "^20.19.0 || >=22.12.0", "@vitejs/devtools": "^0.1.18", "esbuild": "^0.27.0 || ^0.28.0", "jiti": ">=1.21.0", "less": "^4.0.0", "publint": "^0.3.8", "sass": "^1.70.0", "sass-embedded": "^1.70.0", "stylus": ">=0.54.8", "sugarss": "^5.0.0", "terser": "^5.16.0", "tsx": "^4.8.1", "typescript": "^5.0.0 || ^6.0.0", "unplugin-unused": "^0.5.0", "unrun": "*", "yaml": "^2.4.2" }, "optionalPeers": ["@arethetypeswrong/core", "@tsdown/css", "@tsdown/exe", "@types/node", "@vitejs/devtools", "esbuild", "jiti", "less", "publint", "sass", "sass-embedded", "stylus", "sugarss", "terser", "tsx", "typescript", "unplugin-unused", "unrun", "yaml"] }, "sha512-iXPGBABnQnrDMx89H6MOCGcTZp+QW+3rY4YMVKdE6ydchSvPk2O3MI2vgaRVfOtWJ2IjnxSnf1n2yjP67ZBRFQ=="],
 
